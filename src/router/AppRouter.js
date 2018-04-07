@@ -4,6 +4,7 @@ import Home from '../components/Home';
 import Login from '../components/Login'
 // import Login from '../components/Login';
 import Header from '../components/Header';
+import AddOrder from '../components/AddOrder';
 
 
 const AppRouter =()=> (
@@ -13,6 +14,7 @@ const AppRouter =()=> (
             <Switch>
                 <Route path="/" component={Home} exact={true}/>
                 <Route path="/login" component={Login} exact={true}/>
+                <Route path="/addOrder" component={AddOrder} exact={true}/>
 
             </Switch>
         </div>

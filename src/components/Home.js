@@ -20,7 +20,7 @@ export default class Home extends Component {
   render() {
 
     return (
-	<Grid  celled='centered internally' columns={8}>
+	<Grid  celled=' internally' columns={8}>
 		<Grid.Row>
 			<Grid.Column computer={3} position='left'>
 				<Segment>
