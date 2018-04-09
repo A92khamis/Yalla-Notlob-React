@@ -7,6 +7,7 @@ import AddOrder from '../components/AddOrder';
 import Groups from '../components/groups';
 import MyFriends from '../components/MyFriends';
 import Orders from '../components/Orders';
+import Orderdetails from '../components/Orderdetails';
 
 
 
@@ -22,7 +23,7 @@ const AppRouter =()=> (
                 <Route path="/groups" component={Groups} exact={true}/>
                 <Route path="/myFriends" component={MyFriends} exact={true}/>
                 <Route path="/orders" component={Orders} exact={true}/>
-             
+                <Route path="/orders/:id" component={Orderdetails} exact={true}/>
 
             </Switch>
         </div>

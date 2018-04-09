@@ -51,7 +51,7 @@ export default class Orders extends Component {
             <Grid>
             
             <h1>Orders</h1>
-                        <h2><Button icon='plus'  content='Add Order'inverted color='blue'as={Link} to={`/addorder`}  /></h2>
+                        <h2><Button icon='plus'  content='Add Order'inverted color='black'as={Link} to={`/addorder`}  /></h2>
                 <Table celled inverted selectable>
                     <Table.Header>
                         <Table.Row>
