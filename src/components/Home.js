@@ -20,9 +20,9 @@ export default class Home extends Component {
   render() {
 
     return (
-	<Grid  celled=' internally' columns={8}>
+	<Grid  centered divided='vertically' doubling columns={2}  >
 		<Grid.Row>
-			<Grid.Column computer={3} position='left'>
+			<Grid.Column computer={3} position='left' >
 				<Segment>
 				<Label as='a' color='green' tag>latest Orders</Label>
 					<List>

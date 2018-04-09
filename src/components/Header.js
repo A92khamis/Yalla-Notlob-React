@@ -15,11 +15,11 @@ export default class Header extends Component {
 
     return (
    
-        <Menu pointing secondary>
+        <Menu inverted>
         <Menu.Item color='green'>Yalla Notlob <Image src={logo} avatar /></Menu.Item>
           <Menu.Item as={Link} to='/' name='Home' active={activeItem === 'home'} onClick={this.handleItemClick} />
-          <Menu.Item as={Link} to='/friends' name='Friends' active={activeItem === 'messages'} onClick={this.handleItemClick} />
-          <Menu.Item as={Link} to='/groups' name='Groups' active={activeItem === 'friends'} onClick={this.handleItemClick} />
+          <Menu.Item as={Link} to='/myFriends' name='MyFriends' active={activeItem === 'myFriends'} onClick={this.handleItemClick} />
+          <Menu.Item as={Link} to='/groups' name='Groups' active={activeItem === 'groups'} onClick={this.handleItemClick} />
           <Menu.Item as={Link} to='/orders' name='Orders' active={activeItem === 'orders'} onClick={this.handleItemClick} />
           <Menu.Menu position='right'>
           <Menu.Item name='Notification' active={activeItem === 'notify'} onClick={this.handleItemClick}>
