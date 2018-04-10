@@ -1,45 +1,74 @@
 import React, { Component } from 'react'
 import { Link } from "react-router-dom";
 import GridColumn, { Button, Grid, List, Label, Segment, Menu, Icon, Table, Form, Input, Dimmer, Header, Image } from 'semantic-ui-react'
+import axios from 'axios';
+
 let uuid = require('uuid-v4');
 
 
 export default class Orderdetails extends Component {
-
+    
+    
+    orderId = this.props.match.params.id;
 	state = {
-		'orders' : [
-			{'user': "sam", 'item':"koshry", 'amount':"1", 'price':"13", 'comment':"wast"},
-			{'user': "rania", 'item':"burger", 'amount':"2", 'price':"8", 'comment':"bel salsa"},
-		],
-		'joined' : [
-		],
+		'orderitems' : [],
+		'invited' : [],
+    }
+    
 
-		'invited' : [
-			{'user': "khamis", 'img':"12.jpg"},
-			{'user': "mina", 'img':"12.jpg"},
-			{'user': "sam", 'img':"12.jpg"},
-			{'user': "ahmed", 'img':"12.jpg"},
-			{'user': "rania", 'img':"12.jpg"},
-        ],
-        'joined' : [
-			{'user': "khamis", 'img':"12.jpg"},
-			{'user': "rania", 'img':"12.jpg"},
-		],
-
+    constructor(props){
+		super(props);
+        this.getOrderItems();
+		this.getInvited();		
 	}
 
+    getInvited = ()=>{
+		axios.get(`http://localhost:3000/orders/${this.orderId}/invited`).then((response)=>{
+			this.setState({invited: response.data.message})
+		}).catch((error)=>{
+			console.log(error)
+		})
+    }
+    // getJoined = ()=>{
+	// 	axios.get(`http://localhost:3000/orders/${this.orderId}/joined`).then((response)=>{
+	// 		this.setState({invited: response.data.message})
+	// 	}).catch((error)=>{
+	// 		console.log(error)
+	// 	})
+	// }
 
+    getOrderItems = ()=>{
+		axios.get(`http://localhost:3000/orders/${this.orderId}/items`).then((response)=>{
+				console.log(response.data.message)
+				this.setState({orderitems: response.data.message})
+		}).catch((error)=>{
+			console.log(error)
+		})
 
+	}
     
-  handleOpen1 = () => this.setState({ active: true ,flag : 'invited'})
-  handleOpen2 = () => this.setState({ active: true ,flag : 'joined'})
-  handleClose = () => this.setState({ active: false})
+    handleOpen1 = () => this.setState({ active: true ,flag : 'invited'})
+    handleOpen2 = () => this.setState({ active: true ,flag : 'joined'})
+    handleClose = () => this.setState({ active: false})
 
   
 	handleSubmit = (e) => {
-		let formData = new FormData(document.getElementById('itemForm'))
-		console.log(formData.get('item'))
-	}
+        let form = document.getElementById('myForm')
+        let formData = new FormData(form)
+        console.log(formData);
+            
+        axios.post(`http://localhost:3000/orders/${this.orderId}/items`, {
+            "item": formData.get("item"),
+            "price": formData.get("price"),
+            "amount": formData.get("amount"),
+            "comment": formData.get("comment")
+        }).then((response)=>{
+                this.getOrderItems();
+        }).catch(error=>{
+                console.log(error)
+        })
+    }
+	
 
     render() {
 			 const { active , flag} = this.state
@@ -51,7 +80,7 @@ export default class Orderdetails extends Component {
         <Button
         color='blue'
 
-        content='5 people invited'
+        content='Show Invited'
         icon='eye'
           labelPosition='left'
           onClick={this.handleOpen1}
@@ -84,7 +113,7 @@ export default class Orderdetails extends Component {
       <div>
         <Button
         color='blue'
-          content='2 people Joined'
+          content='Show Joined'
           icon='eye'
           labelPosition='left'
           onClick={this.handleOpen2}
@@ -147,7 +176,7 @@ export default class Orderdetails extends Component {
             </Table>
             </Grid.Column>
             <Grid.Column computer={8}>
-            <Form onSubmit={this.handleSubmit} id='itemForm' inverted>
+            <Form onSubmit={this.handleSubmit} id='myForm' inverted>
                 <Form.Group>
                   <Form.Input required name='item' type='text' placeholder='Item'/>
                   <Form.Field required name='amount' control='input' type='number' min={1} max={2} width={3}/>

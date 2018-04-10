@@ -33,11 +33,7 @@ export default class AddOrder extends React.Component{
     }
 
     getMyFriends = ()=>{
-        axios.get(`http://localhost:3000/users/${this.userId}/friends`, {
-            headers:{
-                      'Content-Type': 'application/json'
-            }
-        }).then((response)=>{
+        axios.get(`http://localhost:3000/users/${this.userId}/friends`).then((response)=>{
             console.log(response);
             this.state.friends = response.data.message;
 
@@ -49,11 +45,7 @@ export default class AddOrder extends React.Component{
  }
 
     getMyGroups = ()=>{
-        axios.get(`http://localhost:3000/users/${this.userId}/groups`, {
-            headers:{
-                  'Content-Type': 'application/json'
-            }
-        }).then((response)=>{
+        axios.get(`http://localhost:3000/users/${this.userId}/groups`).then((response)=>{
             console.log(response);
             this.state.groups = response.data.message;
 
@@ -129,18 +121,16 @@ export default class AddOrder extends React.Component{
             console.log(this.state.invitedFriends)
             })
     }
+    handleChangeType = (e)=>{
+        this.setState({'type': e.target.value});
+    }
 
-    handleChangeType(event) {
-        this.setState({'type': event.target.value});
+    handleChangeResturant = (e)=> {
+        this.setState({'resturant': e.target.value});
     }
   
-  
-    handleChangeResturant(event) {
-        this.setState({'resturant': event.target.value});
-    }
-  
-    handleChangeImage(event) {
-        this.setState({'image': event.target.files[0]});
+    handleChangeImage = (e)=> {
+        this.setState({'image': e.target.files[0]});
     }
 
     render = ()=>{
