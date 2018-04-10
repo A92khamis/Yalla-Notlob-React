@@ -4,6 +4,7 @@
 	"description": "This is a dummy description",
 	"main": "",
 	"dependencies": {
+		"axios": "^0.18.0",
 		"uuid-v4": "^0.1.0"
 	},
 	"devDependencies": {},

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import './App.css';
 import { Label,Button,Card,Image,Divider, Grid, Input, Menu, Icon, Form ,Container} from 'semantic-ui-react'
 
+import axios from 'axios';
 
 class GroupMembers extends Component {
   friend = '';
@@ -11,6 +12,18 @@ class GroupMembers extends Component {
     friends:[],
     group:''
   }
+  feachFriends() {
+        
+    axios({
+        method:'GET',
+        url:"http://localhost:3000/friends/",
+        headers:{"Content-Type":"application/json",
+        "Authorization":"Barear eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJleHAiOjE1MjMzNzQyOTN9.ZPkkm9epaaTcBQPtJPiX6V2ydA9-pdbGd26-T86jWcA"},
+      }).then((res)=>{
+          console.log(res);
+        this.setState({friends:res.data});      
+      });
+}
   
   render() {
     return (

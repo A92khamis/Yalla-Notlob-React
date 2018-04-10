@@ -3,13 +3,22 @@ import './App.css';
 import { Label,Segment,Divider, Grid, Input, Menu, Icon, Form ,Container} from 'semantic-ui-react'
 import AllGroups from './allGroups.js';
 import GroupMembers from './groupMembers';
+import axios from 'axios';
+
 class Groups extends Component {
   group = '';
   selected = '';
   state = {
     group: '',
+    selectedGroup:''
   }
+ 
   
+
+
+
+
+
   render() {
     return (
       <Container>
@@ -41,7 +50,7 @@ class Groups extends Component {
       <Label color='red' ribbon> groups</Label>
       <Divider horizontal ></Divider> 
 
-      <AllGroups group={this.state.group} />
+      <AllGroups group={this.state.group} onGroupChange={this.changeGroup} />
 
       </Segment>
       </Grid.Column >
@@ -50,7 +59,7 @@ class Groups extends Component {
       <Label color='red' ribbon> group friends</Label>
       <Divider horizontal ></Divider>  
 
-      <GroupMembers group="0"/>
+      <GroupMembers group={this.state.selectedGroup}/>
 
       </Segment >
       </Grid.Column >
@@ -61,10 +70,26 @@ class Groups extends Component {
     );
   }
 
+
+  changeGroup= selectedGroup => this.setState({ selectedGroup });
+
   handelGroupAdd= () => {
     console.log(this.group);
+    axios({
+      method:'POST',
+      url:"http://localhost:3000/groups/",
+      headers:{"Content-Type":"application/json","Authorization":"Barear eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJleHAiOjE1MjMzODE3Nzh9.ls-rW2WOanWnahx5akD_6TsTaDxSCrYkrWmUQHS9ko8"},
+      data:{        
+          "group":{
+              "groupName":this.group
+          }
+          
+      }
+    }).then((res)=>{
+      this.setState({group: this.group});     
+    });
     
-    this.setState({group: this.group});
+   
   } ;
   doGroupChange =  (e, { name, value }) => this.group = value;
 }

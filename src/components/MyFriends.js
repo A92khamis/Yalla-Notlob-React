@@ -2,24 +2,27 @@ import React, { Component } from 'react';
 import './App.css';
 import { Label,Divider, Grid, Input, Menu, Icon, Form ,Container} from 'semantic-ui-react'
 import FriendsList from './friendsList.js';
-
+import axios from 'axios';
 class MyFriends extends Component {
   friend = '';
   state = {
     friend: '',
   }
-  
+  componentDidMount() {
+
+  }
   render() {
     return (
       <Container>
       <div className="App" >
         <Grid columns={10}>
-          {!this.props.group && <Menu compact>
+          <Menu compact>
             <Menu.Item id="label">
               <Icon name='users' /> friends
               </Menu.Item>
-          </Menu> }
+          </Menu> 
           <Grid.Row centered columns={2}>
+          <Grid.Column centered >
               <label  id="label" to="">
                 your friend email:
                 </label>
@@ -29,12 +32,13 @@ class MyFriends extends Component {
                   <Form.Button content='add' primary />
                 </Form.Group>
               </Form>
+              </Grid.Column >
           </Grid.Row>
         </Grid>
       </div>
-          {!this.props.group && <Divider inverted>friendslist</Divider>}   
+          {!this.props.group && <Divider horizontal >friends list</Divider>}   
       <Grid.Row >
-      {this.state.friend && <FriendsList friend={this.state.friend} />}
+      <FriendsList friend={this.state.friend} />
       </Grid.Row>
       </Container>
     );
@@ -42,8 +46,22 @@ class MyFriends extends Component {
 
   handleAdd= () => {
     console.log(this.friend);
-    
-    this.setState({friend: this.friend});
+
+    axios({
+      method:'POST',
+      url:"http://localhost:3000/friends/",
+      headers:{"Content-Type":"application/json","Authorization":"Barear eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJleHAiOjE1MjMzNzQyOTN9.ZPkkm9epaaTcBQPtJPiX6V2ydA9-pdbGd26-T86jWcA"},
+      data:{
+        
+          "friend":{
+          "friend_id": this.friend
+            }
+          
+      }
+    }).then((res)=>{
+    this.setState({friend: res});        
+      
+    });
   } ;
   doChange =  (e, { name, value }) => this.friend = value;
 }
