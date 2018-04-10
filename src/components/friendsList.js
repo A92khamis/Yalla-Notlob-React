@@ -19,7 +19,6 @@ class FriendsList extends Component {
     render() {
         return (
             <div>
-                <Header />
                 <Container>
                     <div className="friends" >
                         <Grid>

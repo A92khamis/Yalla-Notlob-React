@@ -14,7 +14,7 @@ class MyFriends extends Component {
     return (
       <div style={{ marginTop: '50px' }}>
         <AppHeader user={ this.props.user } />
-        <Grid divided style={{ margin: '50px 50px' }}>
+        <Grid style={{ margin: '50px 50px' }}>
           <Grid.Column width={11}>
             <Segment.Group raised style={{ background: '#8DE4AF', color: '#05396B'}}>
               <Header as='h1'
