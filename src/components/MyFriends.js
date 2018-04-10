@@ -4,6 +4,8 @@ import './App.css';
 import { Label, Card, Segment, Header, Divider, Image, Grid, Input, Menu, Icon, Form ,Container} from 'semantic-ui-react'
 import FriendsList from './friendsList.js';
 import axios from 'axios';
+import Cookies from 'universal-cookie';
+
 class MyFriends extends Component {
   friend = '';
   state = {
@@ -37,17 +39,15 @@ class MyFriends extends Component {
               <Card.Content description='Type the email of your friend!' />
               <Card.Content extra>
                 <Form onSubmit={this.handleAdd}>
-                  <Form>
-                    <Segment basic>
-                      <Form.Input icon='users'
-                        placeholder='Email'
-                        name='email' iconPosition='left'
-                        fluid
-                        required
-                        onChange={ this.doChange } />
-                      <Form.Button content='add' fluid color='grey' />
-                    </Segment>
-                  </Form>
+                  <Segment basic>
+                    <Form.Input icon='users'
+                      placeholder='Email'
+                      name='email' iconPosition='left'
+                      fluid
+                      required
+                      onChange={ this.doChange } />
+                    <Form.Button content='add' fluid color='grey' />
+                  </Segment>
                 </Form>
               </Card.Content>
             </Card>
@@ -59,17 +59,15 @@ class MyFriends extends Component {
 
   handleAdd= () => {
     console.log(this.friend);
+    const cookies = new Cookies();   
 
     axios({
       method:'POST',
       url:"http://localhost:3000/friends/",
-      headers:{"Content-Type":"application/json","Authorization":"Barear eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJleHAiOjE1MjMzNzQyOTN9.ZPkkm9epaaTcBQPtJPiX6V2ydA9-pdbGd26-T86jWcA"},
+      headers:{"Content-Type":"application/json",
+      "Authorization":`Barear ${cookies.get("access_token")}`},
       data:{
-        
-          "friend":{
-          "friend_id": this.friend
-            }
-          
+        "email": this.friend
       }
     }).then((res)=>{
     this.setState({friend: res});        

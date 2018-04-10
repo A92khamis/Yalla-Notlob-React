@@ -3,6 +3,7 @@ import Header from '../components/Header';
 import './App.css';
 import {Grid, Card, Image, Button, Container } from 'semantic-ui-react'
 import axios from 'axios';
+import Cookies from 'universal-cookie';
 
 class FriendsList extends Component {
     friends=[];
@@ -28,12 +29,13 @@ class FriendsList extends Component {
 
  
      feachFriends() {
-        
+      const cookies = new Cookies();   
+
             axios({
                 method:'GET',
                 url:"http://localhost:3000/friends/",
                 headers:{"Content-Type":"application/json",
-                "Authorization":"Barear eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJleHAiOjE1MjMzNzQyOTN9.ZPkkm9epaaTcBQPtJPiX6V2ydA9-pdbGd26-T86jWcA"},
+                "Authorization":`Barear ${cookies.get("access_token")}`},
               }).then((res)=>{
                   console.log(res);
                 this.setState({friends:res.data});      
@@ -83,11 +85,12 @@ class FriendsList extends Component {
 
             deleteFriend = (e) => {
                 console.log(e.target.id);
+                const cookies = new Cookies(); 
                 axios({
                     method:'POST',
                     url:`http://localhost:3000/friends/delete/`,
                     headers:{"Content-Type":"application/json",
-                    "Authorization":"Barear eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJleHAiOjE1MjMzNzQyOTN9.ZPkkm9epaaTcBQPtJPiX6V2ydA9-pdbGd26-T86jWcA"},
+                    "Authorization":`Barear ${cookies.get("access_token")}`},
                     data:{
                         id:`${e.target.id}`
                     }
