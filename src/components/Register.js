@@ -30,12 +30,14 @@ class Register extends React.Component {
       password: this.state.password,
       api_type: 'w'
     }));
-    let messageArr;
-    if (messageArr = JSON.parse(xhr.responseText).email) {
-      console.log(messageArr[0]);
-      this.setState({ errorMessage: messageArr[0] }).then(() => {
-        console.log('msg', this.state.errorMessage);
-      })
+    let response;
+    try {
+      console.log(xhr.responseText);
+      response = JSON.parse(xhr.responseText);
+    } catch(e) {}
+    if (response) {
+      console.log('response', response);
+      window.location = '/';
     }
   }
 
