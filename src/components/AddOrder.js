@@ -135,7 +135,7 @@ export default class AddOrder extends React.Component{
 
     render = ()=>{
         return (
-            <Grid divided='vertically'>
+            <Grid style={{ marginTop: '50px' }} divided='vertically'>
               <Header user={ this.props.user } />
                 <h1><font color="#154360">Add Order</font></h1>
                 <Grid.Row columns={2}>

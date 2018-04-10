@@ -20,10 +20,10 @@ class Groups extends Component {
 
   render() {
     return (
-      <div>
+      <div style={{ marginTop: '50px' }}>
         { console.log(this.props.user) }
         <Header user={ this.props.user } />
-        <Container style={{ marginTop: '100px' }}>
+        <Container>
           <div className="App" >
             <Grid columns={2}>
               <Menu compact>

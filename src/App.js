@@ -3,6 +3,7 @@ import { BrowserRouter, Route, Link, Switch } from "react-router-dom";
 import { AppRouter, SignRouter } from './router/AppRouter';
 import Login from './components/Login';
 import Register from './components/Register';
+import Cookies from 'universal-cookie';
 // import logo from '../public/images/otolb.png';
 
 class App extends React.Component {
@@ -18,7 +19,9 @@ class App extends React.Component {
 
   authenticate() {
     let xhr = new XMLHttpRequest();
-    xhr.open('GET', 'http://localhost:2222', false); // to put the route of registration
+    const cookies = new Cookies();
+    xhr.open('GET', 'http://localhost:3333/users/auth', false); // to put the route of registration
+    xhr.setRequestHeader('Authorization', cookies.get('access_token'))
     xhr.send();
     if(xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
       try {
@@ -29,6 +32,9 @@ class App extends React.Component {
         }
         return user;
       } catch (e) {}
+    } else {
+      let user = { name: '', email: '' };
+      return user;
     }
   }
 

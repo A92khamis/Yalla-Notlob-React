@@ -20,9 +20,9 @@ export default class Home extends Component {
 	}
   render() {
     return (
-    	<div>
+    	<div style={{ marginTop: '50px' }} >
 	      <Header user={ this.props.user } />
-				<Grid style={{ marginTop: '100px' }}centered divided='vertically' doubling columns={2}>
+				<Grid centered divided='vertically' doubling columns={2}>
 					<Grid.Row>
 						<Grid.Column computer={3} position='left'>
 							<Segment>

@@ -70,10 +70,9 @@ cancelOrder = (e)=>{
     render() {
         const { active } = this.state;
         return (
-            
-            <Grid >
-                <AppHeader user={ this.props.user } />
-                <h1>Orders</h1>
+            <Grid style={{ marginTop: '50px' }} >
+            <AppHeader user={ this.props.user } />
+            <h1>Orders</h1>
                         <h2><Button icon='plus'  content='Add Order'inverted color='black'as={Link} to={`/addorder`}  /></h2>
                 <Table celled inverted selectable>
                     <Table.Header>
