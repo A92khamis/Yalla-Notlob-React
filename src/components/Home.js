@@ -22,7 +22,7 @@ export default class Home extends Component {
     return (
     	<div>
 	      <Header user={ this.props.user } />
-				<Grid style={{ marginTop: '100px' }} celled=' internally' columns={8}>
+				<Grid style={{ marginTop: '100px' }}centered divided='vertically' doubling columns={2}>
 					<Grid.Row>
 						<Grid.Column computer={3} position='left'>
 							<Segment>
@@ -40,7 +40,6 @@ export default class Home extends Component {
 								</List>
 							</Segment>
 						</Grid.Column>
-
 						<Grid.Column computer={5}  position='right'>
 							<Segment>
 								<Label as='a' color='green' tag>friend Activities</Label>

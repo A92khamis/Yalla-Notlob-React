@@ -28,6 +28,7 @@ class Login extends React.Component {
       console.log('response', response);
       const cookies = new Cookies();
       cookies.set('access_token', response.access_token);
+      window.location = '/';
     }
   }
 
