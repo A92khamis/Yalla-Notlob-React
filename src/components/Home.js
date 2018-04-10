@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
-import { Link } from "react-router-dom";
+import { Link } from 'react-router-dom';
 import { Image, Grid, List, Label, Segment } from 'semantic-ui-react'
+import Header from './Header';
 // import logo from '../logo.svg';
 import 'semantic-ui-css/semantic.min.css';
 
@@ -18,48 +19,50 @@ export default class Home extends Component {
 		],
 	}
   render() {
-
     return (
-	<Grid  celled=' internally' columns={8}>
-		<Grid.Row>
-			<Grid.Column computer={3} position='left'>
-				<Segment>
-				<Label as='a' color='green' tag>latest Orders</Label>
-					<List>
-					{
-						this.state.latestOrders && this.state.latestOrders.map((order)=>{
-							return(
-								<List.Item key={uuid()} as={Link} to={`/orders/${order.id}`}>
-								  <List.Content>{order.type} on {order.date}</List.Content>
-								</List.Item>
-							)
-						})
-					}
-					</List>
-				</Segment>
-			</Grid.Column>
+    	<div>
+	      <Header user={ this.props.user } />
+				<Grid style={{ marginTop: '100px' }} celled=' internally' columns={8}>
+					<Grid.Row>
+						<Grid.Column computer={3} position='left'>
+							<Segment>
+							<Label as='a' color='green' tag>latest Orders</Label>
+								<List>
+								{
+									this.state.latestOrders && this.state.latestOrders.map((order)=>{
+										return(
+											<List.Item key={uuid()} as={Link} to={`/orders/${order.id}`}>
+											  <List.Content>{order.type} on {order.date}</List.Content>
+											</List.Item>
+										)
+									})
+								}
+								</List>
+							</Segment>
+						</Grid.Column>
 
-			<Grid.Column computer={5}  position='right'>
-				<Segment>
-					<Label as='a' color='green' tag>friend Activities</Label>
-					<List>
-					{
-						this.state.friendActivities && this.state.friendActivities.map((order)=>{
-							return(
-								<List.Item key={uuid()}>
-									<List.Content>
-									<List.Header as='a'>{order.friendName}</List.Header>
-									<List.Description>Created an <Link to={`/orders/${order.orderId}`}><b>order</b></Link> for <a><b>{order.type}</b></a> from <a><b>{order.from}</b></a>.</List.Description>
-									</List.Content>
-								</List.Item>
-							)
-						})
-					}
-					</List>
-				</Segment>
-			</Grid.Column>
-		</Grid.Row>
-	</Grid>
+						<Grid.Column computer={5}  position='right'>
+							<Segment>
+								<Label as='a' color='green' tag>friend Activities</Label>
+								<List>
+								{
+									this.state.friendActivities && this.state.friendActivities.map((order)=>{
+										return(
+											<List.Item key={uuid()}>
+												<List.Content>
+												<List.Header as='a'>{order.friendName}</List.Header>
+												<List.Description>Created an <Link to={`/orders/${order.orderId}`}><b>order</b></Link> for <a><b>{order.type}</b></a> from <a><b>{order.from}</b></a>.</List.Description>
+												</List.Content>
+											</List.Item>
+										)
+									})
+								}
+								</List>
+							</Segment>
+						</Grid.Column>
+					</Grid.Row>
+				</Grid>
+    	</div>
     )
   }
 }

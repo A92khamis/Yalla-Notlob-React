@@ -1,5 +1,6 @@
 import React from 'react';
 import { Form, Grid, Dropdown, Button, Icon, Label } from "semantic-ui-react";
+import Header from '../components/Header';
 
 export default class AddOrder extends React.Component{
 
@@ -103,84 +104,87 @@ export default class AddOrder extends React.Component{
 
     render = ()=>{
         return (
-            <Grid divided='vertically'>
-                <h1><font color="#154360">Add Order</font></h1>
-                <Grid.Row columns={2}>
-                    <Grid.Column>
-                    <Form onSubmit={this.submit}>
+            <div style={{ marginTop: '100px' }}>
+                <Header user={ this.props.user } />
+                <Grid divided='vertically'>
+                    <h1><font color="#154360">Add Order</font></h1>
+                    <Grid.Row columns={2}>
+                        <Grid.Column>
+                        <Form onSubmit={this.submit}>
 
-                    <Form.Field>
-                     <h4><font color="#512E5F">Order For </font></h4>
-                        <select name="meal" className="ui search dropdown" placeholder="Select Meal" style={{ background: 'gainsboro ' }}>
-                            <option value="1" >Breakfast</option>
-                            <option value="2" >Lunch</option>    
-                        </select>
-                    </Form.Field>
+                        <Form.Field>
+                         <h4><font color="#512E5F">Order For </font></h4>
+                            <select name="meal" className="ui search dropdown" placeholder="Select Meal" style={{ background: 'gainsboro ' }}>
+                                <option value="1" >Breakfast</option>
+                                <option value="2" >Lunch</option>    
+                            </select>
+                        </Form.Field>
 
-                     <Form.Field>
-                     <h4><font color="#512E5F">From</font></h4>
-                        <input type="text" name="restaurant" placeholder="Restaurant Name" style={{ background: 'gainsboro ' }} />
-                     </Form.Field>
+                         <Form.Field>
+                         <h4><font color="#512E5F">From</font></h4>
+                            <input type="text" name="restaurant" placeholder="Restaurant Name" style={{ background: 'gainsboro ' }} />
+                         </Form.Field>
 
-                     <Form.Field>
-                     <h4><font color="#512E5F">Add Friend</font></h4>
-                        <select name="invitedFriends" className="ui fluid dropdown" onChange={this.inviteFriend} style={{ background: 'gainsboro ' }}>
-                            <option value="">Invite Friend</option>
+                         <Form.Field>
+                         <h4><font color="#512E5F">Add Friend</font></h4>
+                            <select name="invitedFriends" className="ui fluid dropdown" onChange={this.inviteFriend} style={{ background: 'gainsboro ' }}>
+                                <option value="">Invite Friend</option>
+                                {
+                                    this.friends.map(friend =>{
+                                        return(
+                                            <option key={friend.id} value={friend.id}>{friend.name}</option>
+                                        )
+                                    })
+                                }    
+                            </select>
+                        </Form.Field>
+
+                       
+                        <Form.Field>
+                        <h4><font color="#512E5F">Add Group</font></h4>
+                            <select name="invitedGroups" className="ui fluid dropdown" onChange={this.inviteGroup} style={{ background: 'gainsboro ' }}>
+                                 <option value="">Invite Group</option>
+                                    {
+                                         this.groups.map(group =>{
+                                            return(
+                                                 <option key={group.id} value={group.id}>{group.gname}</option>
+                                             )
+                                        })
+                                     }    
+                             </select>
+                        </Form.Field>
+
+                        <Form.Field>
+                            <h4><font color="#512E5F">Add Menu</font></h4>
+                            <input type="file" name="menuImage" placeholder="Menu Image"/>
+                        </Form.Field>
+                        <Button type='submit' basic color="blue" size="large" floated="right">Publish</Button>
+                    </Form>
+                           
+                        </Grid.Column>
+                            
+
+                       <Grid.Column>
+                        <h2><font color="#154360">Invited Friends</font></h2>
+                        <div>
                             {
-                                this.friends.map(friend =>{
+                                this.state.invitedFriends.map(friend =>{
                                     return(
-                                        <option key={friend.id} value={friend.id}>{friend.name}</option>
+                                         <Label as='a' color='blue'  key={friend.id} image value={friend.id} onClick={this.notInvite}>
+                                         <img src={friend.image} value={friend.id} onClick={this.notInvite} />
+                                         {friend.name}
+                                         <Button as='div' size="mini" value={friend.id} name="delete" onClick={this.notInvite} labelPosition='left'>
+                                         <Icon name='window close' value={friend.id} onClick={this.notInvite}  />
+                                         </Button>
+                                       </Label>
                                     )
                                 })
-                            }    
-                        </select>
-                    </Form.Field>
-
-                   
-                    <Form.Field>
-                    <h4><font color="#512E5F">Add Group</font></h4>
-                        <select name="invitedGroups" className="ui fluid dropdown" onChange={this.inviteGroup} style={{ background: 'gainsboro ' }}>
-                             <option value="">Invite Group</option>
-                                {
-                                     this.groups.map(group =>{
-                                        return(
-                                             <option key={group.id} value={group.id}>{group.gname}</option>
-                                         )
-                                    })
-                                 }    
-                         </select>
-                    </Form.Field>
-
-                    <Form.Field>
-                        <h4><font color="#512E5F">Add Menu</font></h4>
-                        <input type="file" name="menuImage" placeholder="Menu Image"/>
-                    </Form.Field>
-                    <Button type='submit' basic color="blue" size="large" floated="right">Publish</Button>
-                </Form>
-                       
-                    </Grid.Column>
-                        
-
-                   <Grid.Column>
-                    <h2><font color="#154360">Invited Friends</font></h2>
-                    <div>
-                        {
-                            this.state.invitedFriends.map(friend =>{
-                                return(
-                                     <Label as='a' color='blue'  key={friend.id} image value={friend.id} onClick={this.notInvite}>
-                                     <img src={friend.image} value={friend.id} onClick={this.notInvite} />
-                                     {friend.name}
-                                     <Button as='div' size="mini" value={friend.id} name="delete" onClick={this.notInvite} labelPosition='left'>
-                                     <Icon name='window close' value={friend.id} onClick={this.notInvite}  />
-                                     </Button>
-                                   </Label>
-                                )
-                            })
-                        }
-                    </div>
-                   </Grid.Column>
-                </Grid.Row>
-            </Grid>
-        )
+                            }
+                        </div>
+                       </Grid.Column>
+                    </Grid.Row>
+                </Grid>
+            </div>
+        );
     }
 }

@@ -1,25 +1,39 @@
 import React from 'react';
 import { Button, Form, Grid, Header, Message, Segment } from 'semantic-ui-react';
+import Cookies from 'universal-cookie';
 import 'semantic-ui-css/semantic.min.css';
 
 class Login extends React.Component {
 
-  state = {
-    email: '',
-    password: ''
+  constructor(props) {
+    super(props);
+    this.state = {
+      email: '',
+      password: ''
+    }
   }
 
   handleSubmit = (e) => {
     e.preventDefault();
-    var request = new XMLHttpRequest();
-    request.open("POST", "http://localhost:2222"); // to put the route of login
-    request.setRequestHeader("Content-Type", "application/json");
-    request.send(JSON.stringify(this.state));
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', 'http://localhost:3333/auth/login', false); // to put the route of login
+    xhr.setRequestHeader('Content-Type', 'application/json');
+    xhr.send(JSON.stringify(this.state));
+    let response;
+    try {
+      console.log(xhr.responseText);
+      response = JSON.parse(xhr.responseText);
+    } catch(e) {}
+    if (response) {
+      console.log('response', response);
+      const cookies = new Cookies();
+      cookies.set('access_token', response.access_token);
+    }
   }
 
   render() {
     return (
-      <div className='login-form'>
+      <div className='form ui'>
         {/*
           Heads up! The styles below are necessary for the correct render of this example.
           You can do same with CSS, the main idea is that all the elements up to the `Grid`
@@ -28,7 +42,7 @@ class Login extends React.Component {
         <style>{`
           body > div,
           body > div > div,
-          body > div > div > div.login-form {
+          body > div > div > div.form {
             height: 100%;
           }
         `}</style>
@@ -60,7 +74,7 @@ class Login extends React.Component {
                   type='email'
                   iconPosition='left'
                   placeholder='E-mail address'
-                  onChange={ (e) => { this.state.email = e.target.value } }
+                  onChange={ (e) => { this.setState({ email: e.target.value }) } }
                 />
                 <Form.Input
                   name='password'
@@ -70,14 +84,14 @@ class Login extends React.Component {
                   iconPosition='left'
                   placeholder='Password'
                   type='password'
-                  onChange={ (e) => { this.state.password = e.target.value } }
+                  onChange={ (e) => { this.setState({ password: e.target.value }) } }
                 />
 
                 <Button color='grey' fluid size='large'>Login</Button>
               </Segment>
             </Form>
             <Message>
-              New to us? <a href='#'>Sign Up</a>
+              New to us? <a href='/register'>Sign Up</a>
             </Message>
           </Grid.Column>
           </Grid.Row>

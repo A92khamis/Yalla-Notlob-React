@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-
+import Header from '../components/Header';
 import './App.css';
 import {Grid, Card, Image, Button, Container } from 'semantic-ui-react'
 
@@ -18,36 +18,39 @@ class FriendsList extends Component {
 
     render() {
         return (
-            <Container>
-                <div className="friends" >
-                    <Grid>
-                        {this.friends.map( friend => 
-                            <Grid.Column width={4}>
-                        <Card.Group >
-                            <Card>
-                                <Card.Content>
-                                    <Image floated='right' size='mini' src='logo' />
-                                    <Card.Header>
-                                        {friend}
-                                    </Card.Header>
-                                    <Card.Meta>
-                                        Friends of Elliot
-                                </Card.Meta>
-                                    <Card.Description>
-                                    </Card.Description>
-                                </Card.Content>
-                                <Card.Content extra>
-                                    <div className='ui one buttons'>
-                                        <Button basic color='red'>Unfriend</Button>
-                                    </div>
-                                </Card.Content>
-                            </Card>
-                        </Card.Group>
-                        </Grid.Column>
-                        )}
-                        </Grid>
-                </div>
-            </Container>
+            <div>
+                <Header />
+                <Container>
+                    <div className="friends" >
+                        <Grid>
+                            {this.friends.map( friend => 
+                                <Grid.Column width={4}>
+                            <Card.Group >
+                                <Card>
+                                    <Card.Content>
+                                        <Image floated='right' size='mini' src='logo' />
+                                        <Card.Header>
+                                            {friend}
+                                        </Card.Header>
+                                        <Card.Meta>
+                                            Friends of Elliot
+                                    </Card.Meta>
+                                        <Card.Description>
+                                        </Card.Description>
+                                    </Card.Content>
+                                    <Card.Content extra>
+                                        <div className='ui one buttons'>
+                                            <Button basic color='red'>Unfriend</Button>
+                                        </div>
+                                    </Card.Content>
+                                </Card>
+                            </Card.Group>
+                            </Grid.Column>
+                            )}
+                            </Grid>
+                    </div>
+                </Container>
+            </div>
                 )
             }
         

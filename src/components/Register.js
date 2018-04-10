@@ -7,7 +7,11 @@ class Register extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      passwordPattern: ''
+      name: '',
+      email: '',
+      password: '',
+      passwordPattern: '',
+      errorMessage: ''
     }
   }
 
@@ -17,10 +21,22 @@ class Register extends React.Component {
   }
 
   handleSubmit = (e) => {
-    var request = new XMLHttpRequest();
-    request.open('POST', '#/users');
-    request.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
-    request.send();
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', 'http://localhost:3333/auth/register', false); // to put the route of registration
+    xhr.setRequestHeader('Content-Type', 'application/json');
+    xhr.send(JSON.stringify({
+      name: this.state.name,
+      email: this.state.email,
+      password: this.state.password,
+      api_type: 'w'
+    }));
+    let messageArr;
+    if (messageArr = JSON.parse(xhr.responseText).email) {
+      console.log(messageArr[0]);
+      this.setState({ errorMessage: messageArr[0] }).then(() => {
+        console.log('msg', this.state.errorMessage);
+      })
+    }
   }
 
   render() {
@@ -34,7 +50,7 @@ class Register extends React.Component {
         <style>{`
           body > div,
           body > div > div,
-          body > div > div > div.login-form {
+          body > div > div > div.form {
             height: 100%;
           }
         `}</style>
@@ -65,6 +81,7 @@ class Register extends React.Component {
                   icon='user'
                   iconPosition='left'
                   placeholder='Name'
+                  onChange={ (e) => { this.setState({ name: e.target.value }) } }
                 />
                 <Form.Input
                   name='email'
@@ -75,6 +92,7 @@ class Register extends React.Component {
                   placeholder='E-mail address'
                   type='email'
                   inputMode='email'
+                  onChange={ (e) => { this.setState({ email: e.target.value }) } }
                 />
                 <Form.Input
                   name='password'
@@ -84,9 +102,12 @@ class Register extends React.Component {
                   iconPosition='left'
                   placeholder='Password'
                   type='password'
-                  onChange={ (e) => this.setState({
-                    passwordPattern: this.escapeRegExp(e.target.value)
-                  }) }
+                  onChange={ (e) => {
+                    this.setState({
+                      passwordPattern: this.escapeRegExp(e.target.value),
+                      password: e.target.value
+                    })
+                  } }
                 />
                 <Form.Input
                   name='confirmPassword'
@@ -109,7 +130,7 @@ class Register extends React.Component {
               </Segment>
             </Form>
             <Message>
-              Already have account? <a href='#'>Login</a>
+              Already have account? <a href='/'>Login</a>
             </Message>
           </Grid.Column>
           </Grid.Row>
