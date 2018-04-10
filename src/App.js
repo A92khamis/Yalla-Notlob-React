@@ -20,7 +20,7 @@ class App extends React.Component {
   authenticate() {
     let xhr = new XMLHttpRequest();
     const cookies = new Cookies();
-    xhr.open('GET', 'http://localhost:3333/users/auth', false); // to put the route of registration
+    xhr.open('GET', 'http://localhost:3000/users/auth', false); // to put the route of registration
     xhr.setRequestHeader('Authorization', cookies.get('access_token'))
     xhr.send();
     if(xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {

@@ -16,7 +16,7 @@ class Login extends React.Component {
   handleSubmit = (e) => {
     e.preventDefault();
     var xhr = new XMLHttpRequest();
-    xhr.open('POST', 'http://localhost:3333/auth/login', false); // to put the route of login
+    xhr.open('POST', 'http://localhost:3000/auth/login', false); // to put the route of login
     xhr.setRequestHeader('Content-Type', 'application/json');
     xhr.send(JSON.stringify(this.state));
     let response;

@@ -91,18 +91,6 @@ class AllGroups extends Component {
               
             this.feachGroups();     
           });
-
-          ajax({
-            type: "DELETE",
-            url: finalUrl, /* THIS URL IS CALLING CORRECTLY ie. /items/8 */
-            dataType: "json",
-            success: function(response) {
-                console.log("successfully deleted");
-            },
-            error: function () {
-                console.log("error");
-            }
-        })
     }
 
     doAdd = (e) => {
