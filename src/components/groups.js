@@ -5,6 +5,7 @@ import AllGroups from './allGroups.js';
 import Header from '../components/Header';
 import GroupMembers from './groupMembers';
 import axios from 'axios';
+import Cookies from 'universal-cookie';
 
 class Groups extends Component {
   state = {
@@ -77,11 +78,12 @@ class Groups extends Component {
   changeGroup= selectedGroup => this.setState({ selectedGroup });
 
   handelGroupAdd= () => {
+    const cookies = new Cookies();       
     console.log(this.group);
     axios({
       method:'POST',
       url:"http://localhost:3000/groups/",
-      headers:{"Content-Type":"application/json","Authorization":"Barear eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJleHAiOjE1MjMzODE3Nzh9.ls-rW2WOanWnahx5akD_6TsTaDxSCrYkrWmUQHS9ko8"},
+      headers:{"Content-Type":"application/json","Authorization":`Barear ${cookies.get("access_token")}`},
       data:{        
           "group":{
               "groupName":this.group
