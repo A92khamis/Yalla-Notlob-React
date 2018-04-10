@@ -1,59 +1,80 @@
 import React from 'react';
 import { Form, Grid, Dropdown, Button, Icon, Label } from "semantic-ui-react";
+import axios from 'axios';
+import Header from './Header';
 
 export default class AddOrder extends React.Component{
 
-    friends = [
-            {
-                name: 'esam',
-                id: 1,
-                image:'https://react.semantic-ui.com/assets/images/avatar/large/steve.jpg',
-            },
-            {
-                name: 'Mina',
-                id: 2,
-                image:'../public/images/person.jpeg',
+    constructor(props) {
+        super(props);
+      this.getMyFriends();
+      this.getMyGroups();
+      }
+      friends = [];
+      groups = [];
 
-            },
-            {
-                name: 'rania',
-                id: 3,
-            }
-
-    ]
-    groups = [
-        {
-            gname:'foodhunters',
-            id:'1',
-            image:'../public/images/otolb.png',
-            members:[{
-                name: 'samy',
-                id: 4,
-                image:'../public/images/person.jpeg',
-
-            },
-            {
-                name: 'somya',
-                id: 5,
-            }]
-        },
-        {
-            gname:'koshryfans',
-            id:'2',
-            image:'../public/images/otolb.png',
-        }, 
-    ]
-
-    state = {
+      state = {
+        type: '',
+        resturant:'',
+        image:'',
         invitedFriends: []
-    }
+      }
+
+      // if user exist in url  
+      //userId = this.props.match.params.id;
+
+
+  
 
     submit = (e)=>{
-        e.preventDefault();
         console.log(e.target.elements);
+        e.preventDefault();
         
     }
 
+    getMyFriends = ()=>{
+        axios.get(`http://localhost:3000/users/${this.userId}/friends`).then((response)=>{
+            console.log(response);
+            this.state.friends = response.data.message;
+
+        }).catch((error)=>{
+            console.log("error", error);
+
+       })
+
+ }
+
+    getMyGroups = ()=>{
+        axios.get(`http://localhost:3000/users/${this.userId}/groups`).then((response)=>{
+            console.log(response);
+            this.state.groups = response.data.message;
+
+        }).catch((error)=>{
+            console.log("error", error);
+
+        })
+
+    }
+    addOrder = (e)=>{ 
+        this.setState( ()=>{
+            axios.post(`http://localhost:3000/users/orders`,{
+                'type': this.state.type,
+                'ownerId': 2, // how we gonna get user id 
+                'resturant': this.state.resturant,
+                'image': this.state.image,
+            },
+            {headers: {
+                'Content-Type': 'multipart/form-data'
+            }}).then((response)=>{
+                console.log("response",response);
+            }).catch((error)=>{
+                console.log("error", error);
+            })
+    
+        });
+    }
+    
+      
     inviteFriend = (e)=>{
             let invitedFriendsArr = this.state.invitedFriends.slice();
             this.friends.forEach(friend=>{
@@ -85,7 +106,7 @@ export default class AddOrder extends React.Component{
 
     }
 
-    notInvite = (e)=>{
+    uninvite = (e)=>{
         console.log("in it")
         let invitedFriendsArr = [];
         this.state.invitedFriends.forEach(friend=>{
@@ -100,26 +121,38 @@ export default class AddOrder extends React.Component{
             console.log(this.state.invitedFriends)
             })
     }
+    handleChangeType = (e)=>{
+        this.setState({'type': e.target.value});
+    }
+
+    handleChangeResturant = (e)=> {
+        this.setState({'resturant': e.target.value});
+    }
+  
+    handleChangeImage = (e)=> {
+        this.setState({'image': e.target.files[0]});
+    }
 
     render = ()=>{
         return (
-            <Grid divided='vertically'>
+            <Grid style={{ marginTop: '50px' }} divided='vertically'>
+              <Header user={ this.props.user } />
                 <h1><font color="#154360">Add Order</font></h1>
                 <Grid.Row columns={2}>
                     <Grid.Column>
-                    <Form onSubmit={this.submit}>
+                    <Form onSubmit={this.addOrder}>
 
-                    <Form.Field>
+                    <Form.Field onChange={this.handleChangeType} value={this.state.type} id ='add_order'>
                      <h4><font color="#512E5F">Order For </font></h4>
                         <select name="meal" className="ui search dropdown" placeholder="Select Meal" style={{ background: 'gainsboro ' }}>
-                            <option value="1" >Breakfast</option>
-                            <option value="2" >Lunch</option>    
+                            <option value="breakfast" >Breakfast</option>
+                            <option value="Launch" >Lunch</option>    
                         </select>
                     </Form.Field>
 
                      <Form.Field>
                      <h4><font color="#512E5F">From</font></h4>
-                        <input type="text" name="restaurant" placeholder="Restaurant Name" style={{ background: 'gainsboro ' }} />
+                        <input type="text" name="restaurant" placeholder="Restaurant Name" style={{ background: 'gainsboro ' }} onChange={this.handleChangeResturant} value={this.state.resturant} />
                      </Form.Field>
 
                      <Form.Field>
@@ -144,7 +177,7 @@ export default class AddOrder extends React.Component{
                                 {
                                      this.groups.map(group =>{
                                         return(
-                                             <option key={group.id} value={group.id}>{group.gname}</option>
+                                             <option key={group.id} value={group.id}  onChange={this.handleChangeImage} value={this.state.image}>{group.gname}</option>
                                          )
                                     })
                                  }    
@@ -167,11 +200,11 @@ export default class AddOrder extends React.Component{
                         {
                             this.state.invitedFriends.map(friend =>{
                                 return(
-                                     <Label as='a' color='blue'  key={friend.id} image value={friend.id} onClick={this.notInvite}>
-                                     <img src={friend.image} value={friend.id} onClick={this.notInvite} />
+                                     <Label as='a' color='blue'  key={friend.id} image value={friend.id} onClick={this.uninvite}>
+                                     <img src={friend.image} value={friend.id} onClick={this.uninvite} />
                                      {friend.name}
-                                     <Button as='div' size="mini" value={friend.id} name="delete" onClick={this.notInvite} labelPosition='left'>
-                                     <Icon name='window close' value={friend.id} onClick={this.notInvite}  />
+                                     <Button as='div' size="mini" value={friend.id} name="delete" onClick={this.uninvite} labelPosition='left'>
+                                     <Icon name='window close' value={friend.id} onClick={this.uninvite}  />
                                      </Button>
                                    </Label>
                                 )

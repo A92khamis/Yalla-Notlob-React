@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-
+import Header from '../components/Header';
 import './App.css';
 import uuid from 'uuid/v4';
 import { Grid, Card, Image, Button, Container, Item } from 'semantic-ui-react'
@@ -57,8 +57,8 @@ class AllGroups extends Component {
                         )}
                           </Item.Group>
 
-                </div>
-            </Container>
+                    </div>
+                </Container>
         )
     }
 

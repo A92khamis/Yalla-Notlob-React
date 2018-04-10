@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-
+import Header from '../components/Header';
 import './App.css';
 import {Grid, Card, Image, Button, Container } from 'semantic-ui-react'
 import axios from 'axios';

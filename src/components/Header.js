@@ -1,36 +1,50 @@
 import React, { Component } from 'react'
 import { Link } from "react-router-dom";
-import { Icon, Menu, Image, Dropdown,Segment,Label } from 'semantic-ui-react'
+import { Icon, Menu, Image, Dropdown, Segment, Label, Container } from 'semantic-ui-react'
 import logo from '../public/images/otolb.png';
 import user from '../public/images/person.jpeg';
+import Cookies from 'universal-cookie';
 
 
 export default class Header extends Component {
   state = { activeItem: 'home' }
 
-  handleItemClick = (e, { name }) => this.setState({ activeItem: name })
+  // handleItemClick = (e, { name }) => this.setState({ activeItem: name })
+  handleLogOut = (e) => {
+    const cookies = new Cookies();
+    cookies.remove('access_token');
+    window.location = '/';
+  }
 
   render() {
-    const { activeItem } = this.state
-
+    // const { activeItem } = this.state;
     return (
-   
-        <Menu pointing secondary>
-        <Menu.Item color='green'>Yalla Notlob <Image src={logo} avatar /></Menu.Item>
-          <Menu.Item as={Link} to='/' name='Home' active={activeItem === 'home'} onClick={this.handleItemClick} />
-          <Menu.Item as={Link} to='/friends' name='Friends' active={activeItem === 'messages'} onClick={this.handleItemClick} />
-          <Menu.Item as={Link} to='/groups' name='Groups' active={activeItem === 'friends'} onClick={this.handleItemClick} />
-          <Menu.Item as={Link} to='/orders' name='Orders' active={activeItem === 'orders'} onClick={this.handleItemClick} />
-          <Menu.Menu position='right'>
-          <Menu.Item name='Notification' active={activeItem === 'notify'} onClick={this.handleItemClick}>
-          <Icon name='bell' /><Label color='red' className="notifyLabel">3</Label>
+      <Menu fixed='top' style={{ background: '#05396B' }}>
+        <Container>
+          <Menu.Item as='a' href='/' header>
+            <Image
+              size='mini'
+              src={ logo }
+              style={{ marginRight: '1.5em' }}
+            />
+            <span style={{ fontSize: '30px', color: '#FFDE00' }}>Yalla Notlob</span>
           </Menu.Item>
-          <Menu.Item name='profile' active={activeItem === 'profile'} onClick={this.handleItemClick} >
-          <Image src={user} avatar /><span>Username</span></Menu.Item>
-          <Menu.Item as={Link} to='/login' name='Login' active={activeItem === 'login'} onClick={this.handleItemClick} />
+          <Menu.Item as='a' style={{ color: 'white' }} href='/'>Home</Menu.Item>
+          <Menu.Item as='a' style={{ color: 'white' }} href='/orders'>Orders</Menu.Item>
+          <Menu.Item as='a' style={{ color: 'white' }} href='/myfriends'>Friends</Menu.Item>
+          <Menu.Item as='a' style={{ color: 'white' }} href='/groups'>Groups</Menu.Item>
+          <Menu.Menu position='right'>
+            <Menu.Item as='a' style={{ color: 'white' }} name='Notification' onClick={this.handleItemClick}>
+              <Icon name='bell' style={{ marginRight: 0, color: '#FFDE00' }} /><Label style={{ marginLeft: 5 }} color='white' className="notifyLabel">3</Label>
+            </Menu.Item>
+            <Menu.Item as='a' style={{ color: 'white' }} name='profile' onClick={ this.handleItemClick }>
+              <Image src={user} avatar />
+              <span style={{ marginLeft: 5 }}>{ this.props.user.name }</span>
+            </Menu.Item>
+            <Menu.Item as='a' style={{ color: 'white' }} name='Logout' onClick={ this.handleLogOut } />
           </Menu.Menu>
-
-        </Menu>
-    )
+        </Container>
+      </Menu>
+    );
   }
 }

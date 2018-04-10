@@ -2,12 +2,11 @@ import React, { Component } from 'react';
 import './App.css';
 import { Label,Segment,Divider, Grid, Input, Menu, Icon, Form ,Container} from 'semantic-ui-react'
 import AllGroups from './allGroups.js';
+import Header from '../components/Header';
 import GroupMembers from './groupMembers';
 import axios from 'axios';
 
 class Groups extends Component {
-  group = '';
-  selected = '';
   state = {
     group: '',
     selectedGroup:''
@@ -21,6 +20,9 @@ class Groups extends Component {
 
   render() {
     return (
+      <div style={{ marginTop: '50px' }}>
+        { console.log(this.props.user) }
+        <Header user={ this.props.user } />
       <Container>
       <div className="App" >
         <Grid columns={2}>
@@ -61,12 +63,13 @@ class Groups extends Component {
 
       <GroupMembers group={this.state.selectedGroup}/>
 
-      </Segment >
-      </Grid.Column >
-      </Grid.Row>
-      </Grid>
+                  </Segment >
+                </Grid.Column >
+              </Grid.Row>
+            </Grid>
+          </div>
+        </Container>
       </div>
-      </Container>
     );
   }
 
