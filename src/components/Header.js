@@ -34,8 +34,8 @@ export default class Header extends Component {
           <Menu.Item as='a' style={{ color: 'white' }} href='/myfriends'>Friends</Menu.Item>
           <Menu.Item as='a' style={{ color: 'white' }} href='/groups'>Groups</Menu.Item>
           <Menu.Menu position='right'>
-            <Menu.Item as='a' style={{ color: 'white' }} name='Notification' onClick={this.handleItemClick}>
-              <Icon name='bell' style={{ marginRight: 0, color: '#FFDE00' }} /><Label style={{ marginLeft: 5 }} color='white' className="notifyLabel">3</Label>
+            <Menu.Item as='a' name='Notification' onClick={this.handleItemClick}>
+              <Icon name='bell' style={{ marginRight: 0, color: '#FFDE00' }} /><Label style={{ marginLeft: 5 }} className="notifyLabel">3</Label>
             </Menu.Item>
             <Menu.Item as='a' style={{ color: 'white' }} name='profile' onClick={ this.handleItemClick }>
               <Image src={user} avatar />

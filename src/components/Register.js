@@ -22,7 +22,7 @@ class Register extends React.Component {
 
   handleSubmit = (e) => {
     var xhr = new XMLHttpRequest();
-    xhr.open('POST', 'http://localhost:3333/auth/register', false); // to put the route of registration
+    xhr.open('POST', 'http://localhost:3000/auth/register', false); // to put the route of registration
     xhr.setRequestHeader('Content-Type', 'application/json');
     xhr.send(JSON.stringify({
       name: this.state.name,
