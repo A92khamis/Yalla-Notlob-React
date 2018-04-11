@@ -62,7 +62,7 @@ class Groups extends Component {
       <Label color='red' ribbon> group friends</Label>
       <Divider horizontal ></Divider>  
 
-      <GroupMembers group={this.state.selectedGroup}/>
+     <GroupMembers group={this.state.selectedGroup}/>
 
                   </Segment >
                 </Grid.Column >
@@ -75,7 +75,9 @@ class Groups extends Component {
   }
 
 
-  changeGroup= selectedGroup => this.setState({ selectedGroup });
+  changeGroup= selectedGroup => {this.setState({ selectedGroup:selectedGroup })
+console.log(`ahooooooooooooo${this.state.selectedGroup}`);
+};
 
   handelGroupAdd= () => {
     const cookies = new Cookies();       

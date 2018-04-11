@@ -50,7 +50,7 @@ class AllGroups extends Component {
                                 
                                 <Item.Content>
                                     <Item.Header>{ friend.groupName }</Item.Header>
-                                    <Button icon='add user' floated='right' onClick= {this.doAdd} >
+                                    <Button icon='add user' id={friend.id} floated='right' onClick= {this.doAdd} >
                                     </Button>
                                     <Button icon='close' key={uuid()} id={friend.id} floated='right' onClick={ this.doDelete } >
                                     </Button>
@@ -115,8 +115,12 @@ class AllGroups extends Component {
     
 
     doAdd = (e) => {
-        this.selected = e.target.id ;
+        console.log(`alllllllllllllllllll`);        
+        this.selected = e.target.id;
+        console.log(`alllllll${this.selected}`);
         this.props.onGroupChange(this.selected);
+        
+        
     }
 
 }
