@@ -20,27 +20,27 @@ class MyFriends extends Component {
         <AppHeader user={ this.props.user } />
         <Grid style={{ margin: '50px 50px' }}>
           <Grid.Column width={11}>
-            <Segment.Group raised style={{ background: '#8DE4AF', color: '#05396B'}}>
-              <Header as='h1'
-                attached='top'
-                style={{ background: '#05396B', color: '#FFDE00'}}
-              ><span><Icon size='small' name='users' /></span>Friends List
-              </Header>
-              <Segment attached>
+            <Card raised fluid>
+              <Card.Content style={{ background: '#05396B' }}>
+                <Header as='h1' style={{ color: '#FFDE00' }}>
+                  <span><Icon size='small' name='users' /></span>Friends List
+                </Header>
+              </Card.Content>
+              <Card.Content extra>
                 <FriendsList friend={this.state.friend} />
-              </Segment>
-            </Segment.Group>
+              </Card.Content>
+            </Card>
           </Grid.Column>
           <Grid.Column width={5}>
             <Card raised>
               <Card.Content style={{ background: '#05396B' }}>
-                <Header as='h3' style={{ color: 'white' }}><span><Icon size='small' name='user' /></span>Add Friend</Header>
+                <Header as='h3' style={{ color: 'white' }}><span><Icon size='small' name='add user' /></span>Add Friend</Header>
               </Card.Content>
               <Card.Content description='Type the email of your friend!' />
               <Card.Content extra>
                 <Form onSubmit={this.handleAdd}>
                   <Segment basic>
-                    <Form.Input icon='users'
+                    <Form.Input icon='at'
                       placeholder='Email'
                       name='email' iconPosition='left'
                       fluid

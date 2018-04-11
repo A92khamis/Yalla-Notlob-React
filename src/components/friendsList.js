@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import Header from '../components/Header';
 import './App.css';
-import {Grid, Card, Image, Button, Container } from 'semantic-ui-react'
+import {Grid, Card, Header, Item, Segment, Image, Button, Container } from 'semantic-ui-react'
 import axios from 'axios';
 import Cookies from 'universal-cookie';
 
@@ -42,43 +41,41 @@ class FriendsList extends Component {
               });
     }
 
-    render() {
-        return (
-            <Container>
-                <div className="friends" >
-                    <Grid>
-                        {this.state.friends && this.state.friends.map( friend => 
-                            <Grid.Column width={4}>
-                        <Card.Group >
-                            <Card>
-                                <Card.Content>
-                                    <Image floated='right' size='mini' src='logo' />
-                                    <Card.Header>
-                                        {console.log(friend[0])}
-                                        
-                                        {friend[0].name}
-                                    </Card.Header>
-                                    <Card.Meta>
-                                        {friend[0].email}
-                                </Card.Meta>
-                                    <Card.Description>
-                                    </Card.Description>
-                                </Card.Content>
-                                <Card.Content extra>
-                                    <div className='ui one buttons'>
-                                        <Button basic color='red' id={friend[0].id} onClick={this.deleteFriend} >Unfriend</Button>
-                                    </div>
-                                </Card.Content>
-                            </Card>
-                        </Card.Group>
-                        </Grid.Column>
-                        )}
-                        </Grid>
-                </div>
-            </Container>
-                )
-            }
-        
+  render() {
+    return (
+      <Segment.Group>
+      {
+        this.state.friends && this.state.friends.map((friend) => (
+          <Segment attached compact>
+            <Grid container>
+              <Grid.Row centered='true'>
+                <Grid.Column width={3} textAlign='left'>
+                  <Image size='tiny' src={ friend[0].image } />
+                </Grid.Column>
+                <Grid.Column width={4} textAlign='left'>
+                  <Header as='h3'>
+                    { friend[0].name }
+                  </Header>
+                </Grid.Column>
+                <Grid.Column width={4} textAlign='left'>
+                  <Header disabled as='h3'>
+                    { friend[0].email }
+                  </Header>
+                </Grid.Column>
+                <Grid.Column width={5} verticalAlign='true'>
+                  <Button basic color='red'
+                    id={ friend[0].id }
+                    onClick={ this.deleteFriend }>Unfriend
+                  </Button>
+                </Grid.Column>
+              </Grid.Row>
+            </Grid>
+          </Segment>
+        ))
+      }
+      </Segment.Group>
+    );
+  }
             componentWillReceiveProps(nextProps){
                 this.feachFriends(); 
             }

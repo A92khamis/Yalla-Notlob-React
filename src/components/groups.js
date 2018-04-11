@@ -33,8 +33,8 @@ class Groups extends Component {
               </Menu.Item>
           </Menu>
           <Grid.Row centered columns={2}>
-            <Grid.Column centered >
-              <label verticalAlign='middle' id="label" to="">
+            <Grid.Column centered='true' >
+              <label id="label" to="">
                 group:
                 </label>
               <Form onSubmit={this.handelGroupAdd}>

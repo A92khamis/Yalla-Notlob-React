@@ -104,11 +104,11 @@ class AllGroups extends Component {
             }
             });
 
-            xhr.open("DELETE", "http://localhost:3000/groups/1");
-            xhr.setRequestHeader("Authorization", "eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJleHAiOjE1MjMzOTkxMDh9.kC09OosWotuGTPdtzJJD-pmkXmQ9QvHCEKs-uWE3fhc");
+            xhr.open("DELETE", "http://localhost:3000/groups/2");
+            xhr.setRequestHeader("Authorization", cookies.get("access_token"));
             xhr.setRequestHeader("Content-Type", "application/json");
-            xhr.setRequestHeader("Cache-Control", "no-cache");
-            xhr.setRequestHeader("Postman-Token", "5c0322ad-4410-4311-bb0f-adb8f668cd18");
+            // xhr.setRequestHeader("Cache-Control", "no-cache");
+            // xhr.setRequestHeader("Postman-Token", "5c0322ad-4410-4311-bb0f-adb8f668cd18");
 
             xhr.send(data);
     }

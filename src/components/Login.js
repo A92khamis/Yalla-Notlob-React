@@ -1,6 +1,7 @@
 import React from 'react';
-import { Button, Form, Grid, Header, Message, Segment } from 'semantic-ui-react';
+import { Button, Form, Image, Grid, Header, Message, Segment } from 'semantic-ui-react';
 import Cookies from 'universal-cookie';
+import logo from '../public/images/otolb.png';
 import 'semantic-ui-css/semantic.min.css';
 
 class Login extends React.Component {
@@ -51,12 +52,18 @@ class Login extends React.Component {
           textAlign='center'
           style={{ height: '100%' }}
         >
-          <Grid.Row>
-            <p
-              style={{ color: '#05386b', fontSize: '70px',
-                  fontWeight: 'bold', margin: 'auto' }}>
-               Yalla Notlob
-            </p>
+          <Grid.Row style={{ background: '#05386b' }}>
+            <Header
+              style={{ fontSize: '70px', color: '#FFDE00',
+              fontWeight: 'bold', margin: 'auto' }}
+            >
+              <Image
+                size='massive'
+                src={ logo }
+                style={{ marginBottom: '20px' }}
+              />
+              Yalla Notlob
+            </Header>
 
           </Grid.Row>
           <Grid.Row
