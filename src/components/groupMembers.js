@@ -31,9 +31,14 @@ class GroupMembers extends Component {
       }).then((res)=>{
           console.log(res);
           if(res.data.length >= 0){
-        this.setState({
+            if (group) {
+          this.setState({
           group: group,
           friends: res.data});   
+            }else{
+              this.setState({
+                friends: res.data}); 
+            }
           }   
       });
 }
@@ -109,11 +114,11 @@ class GroupMembers extends Component {
       url:"http://localhost:3000/groups/add",
       headers:{"Content-Type":"application/json","Authorization":`Barear ${cookies.get("access_token")}`},
       data:{        
-        "group":{
+        
                 
           "group_id":this.state.group,
           "email":this.friend
-      }
+      
           
       }
     }).then((res)=>{
@@ -126,23 +131,24 @@ class GroupMembers extends Component {
 
   doRemove = (e) => { 
     console.log(e.target.id);
+    const cookies = new Cookies();       
     
-    // axios({
-    //   method:'DELETE',
-    //   url:"http://localhost:3000/groups/add",
-    //   headers:{"Content-Type":"application/json","Authorization":`Barear ${cookies.get("access_token")}`},
-    //   data:{        
-    //     "group":{
+    axios({
+      method:'post',
+      url:"http://localhost:3000/groups/remove",
+      headers:{"Content-Type":"application/json","Authorization":`Barear ${cookies.get("access_token")}`},
+      data:{        
+        "group":{
                 
-    //       "group_id":this.state.group,
-    //       "user_id":3
-    //   }
+          "group_id":this.state.group,
+          "user_id":e.target.id
+      }
           
-    //   }
-    // }).then((res)=>{
-    //  console.log(res);
-    //   this.feachFriends(null); 
-    // });
+      }
+    }).then((res)=>{
+     console.log(res);
+      this.feachFriends(null); 
+    });
   }
 
 }
