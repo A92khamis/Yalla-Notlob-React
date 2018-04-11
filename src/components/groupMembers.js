@@ -4,6 +4,7 @@ import { Label,Button,Card,Image,Divider, Grid, Input, Menu, Icon, Form ,Contain
 import Header from '../components/Header';
 
 import axios from 'axios';
+import Cookies from 'universal-cookie';
 
 class GroupMembers extends Component {
   friend = '';
@@ -13,16 +14,27 @@ class GroupMembers extends Component {
     friends:[],
     group:''
   }
-  feachFriends() {
+
+  componentDidMount(){
+    this.feachFriends();
+  }
+
+  feachFriends(group) {
+    const cookies = new Cookies();       
+        console.log(group);
         
     axios({
         method:'GET',
-        url:"http://localhost:3000/friends/",
+        url:`http://localhost:3000/groups/members?group_id=${group ||this.state.group}`,
         headers:{"Content-Type":"application/json",
-        "Authorization":"Barear eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJleHAiOjE1MjMzNzQyOTN9.ZPkkm9epaaTcBQPtJPiX6V2ydA9-pdbGd26-T86jWcA"},
+        "Authorization":`Barear ${cookies.get("access_token")}`},
       }).then((res)=>{
           console.log(res);
-        this.setState({friends:res.data});      
+          if(res.data.length >= 0){
+        this.setState({
+          group: group,
+          friends: res.data});   
+          }   
       });
 }
   
@@ -46,14 +58,14 @@ class GroupMembers extends Component {
         <Grid.Row >
                   <div className="friends" >
                       <Grid>
-                          {this.friends.map( friend => 
+                          {this.state.friends.map( friend => 
                               <Grid.Column width={4}>
                           <Card.Group >
                               <Card>
                                   <Card.Content>
                                       <Image floated='right' size='mini' src='logo' />
                                       <Card.Header>
-                                          {friend}
+                                          {friend.id}
                                       </Card.Header>
                                       <Card.Meta>
                                           Friends of Elliot
@@ -63,7 +75,7 @@ class GroupMembers extends Component {
                                   </Card.Content>
                                   <Card.Content extra>
                                       <div className='ui one buttons'>
-                                          <Button basic color='red'>Unfriend</Button>
+                                          <Button basic color='red' id={friend.user_id} onClick={this.doRemove} >Remove</Button>
                                       </div>
                                   </Card.Content>
                               </Card>
@@ -82,15 +94,57 @@ class GroupMembers extends Component {
 
 
   componentWillReceiveProps=( nextProps )=>{
-    
+    console.log(nextProps);
+    this.feachFriends(nextProps.group);
 }  
 
   handleAdd= () => {
     console.log(this.friend);
-    this.friends.push(this.friend);
-    this.setState({friend: this.friend , friends: this.friends});
+    
+
+    const cookies = new Cookies();       
+    console.log(this.state.group);
+    axios({
+      method:'POST',
+      url:"http://localhost:3000/groups/add",
+      headers:{"Content-Type":"application/json","Authorization":`Barear ${cookies.get("access_token")}`},
+      data:{        
+        "group":{
+                
+          "group_id":this.state.group,
+          "email":this.friend
+      }
+          
+      }
+    }).then((res)=>{
+     console.log(res);
+      this.feachFriends(null); 
+    });
   } ;
   doChange =  (e, { name, value }) => this.friend = value;
+
+
+  doRemove = (e) => { 
+    console.log(e.target.id);
+    
+    // axios({
+    //   method:'DELETE',
+    //   url:"http://localhost:3000/groups/add",
+    //   headers:{"Content-Type":"application/json","Authorization":`Barear ${cookies.get("access_token")}`},
+    //   data:{        
+    //     "group":{
+                
+    //       "group_id":this.state.group,
+    //       "user_id":3
+    //   }
+          
+    //   }
+    // }).then((res)=>{
+    //  console.log(res);
+    //   this.feachFriends(null); 
+    // });
+  }
+
 }
 
 export default GroupMembers;
