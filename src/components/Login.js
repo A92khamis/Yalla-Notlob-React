@@ -110,16 +110,7 @@ class Login extends React.Component {
                   <Button color='grey' fluid size='large' id="login-button">Login</Button>
                   
                   </Form>
-                  <div>
-                    <SocialButton 
-                      provider='google'
-                      appId= '228775057985-g123e53oqf7aseqdrr452b66cuqaug9n.apps.googleusercontent.com'
-                      onLoginSuccess={this.handleSocialLogin}
-                      onLoginFailure={this.handleSocialLoginFailure}
-                    >
-                    Gmail
-                    </SocialButton>
-                    </div>
+                
                     
                  
                 </Segment>
