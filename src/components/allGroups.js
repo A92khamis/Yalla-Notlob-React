@@ -97,14 +97,14 @@ class AllGroups extends Component {
             var data = null;
             var xhr = new XMLHttpRequest();
             // xhr.withCredentials = true;
-
+            var that = this;
             xhr.addEventListener("readystatechange", function () {
             if (this.readyState === 4) {
-                console.log(this.responseText);
+                that.feachGroups();
             }
             });
 
-            xhr.open("DELETE", "http://localhost:3000/groups/2");
+            xhr.open("DELETE", urldel);
             xhr.setRequestHeader("Authorization", cookies.get("access_token"));
             xhr.setRequestHeader("Content-Type", "application/json");
             // xhr.setRequestHeader("Cache-Control", "no-cache");
