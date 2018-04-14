@@ -26,8 +26,8 @@ class MyFriends extends Component {
                   <span><Icon size='small' name='users' /></span>Friends List
                 </Header>
               </Card.Content>
-              <Card.Content extra>
-                <FriendsList friend={this.state.friend} />
+              <Card.Content>
+                <FriendsList friend={ this.state.friend } />
               </Card.Content>
             </Card>
           </Grid.Column>
@@ -64,14 +64,16 @@ class MyFriends extends Component {
     axios({
       method:'POST',
       url:"http://localhost:3000/friends/",
-      headers:{"Content-Type":"application/json",
+      headers:{"Content-Type": "application/json",
       "Authorization":`Barear ${cookies.get("access_token")}`},
       data:{
         "email": this.friend
       }
-    }).then((res)=>{
-    this.setState({friend: res});        
-      
+    }).then((res) => {
+      this.setState({ friend: res });
+    }).catch((err) => {
+      // need to display error message for the user!!!!
+      console.log('err', err);
     });
   } ;
   doChange =  (e, { name, value }) => this.friend = value;
