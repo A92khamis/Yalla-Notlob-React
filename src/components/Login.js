@@ -1,9 +1,10 @@
 import React from 'react';
-import { Button, Form, Image, Grid, Header, Message, Segment } from 'semantic-ui-react';
+import { Button, Form,Icon, Image, Grid, Header, Message, Segment } from 'semantic-ui-react';
 import Cookies from 'universal-cookie';
 import logo from '../public/images/otolb.png';
 import 'semantic-ui-css/semantic.min.css';
-
+import SocialButton from './SocialButton'
+import './App.css';
 class Login extends React.Component {
 
   constructor(props) {
@@ -24,13 +25,21 @@ class Login extends React.Component {
     try {
       console.log(xhr.responseText);
       response = JSON.parse(xhr.responseText);
-    } catch(e) {}
+    } catch (e) { }
     if (response) {
       console.log('response', response);
       const cookies = new Cookies();
       cookies.set('access_token', response.access_token);
       window.location = '/';
     }
+  }
+
+  handleSocialLogin = (user) => {
+    console.log(user)
+  }
+
+  handleSocialLoginFailure = (err) => {
+    console.error(err)
   }
 
   render() {
@@ -54,12 +63,14 @@ class Login extends React.Component {
         >
           <Grid.Row style={{ background: '#05386b' }}>
             <Header
-              style={{ fontSize: '70px', color: '#FFDE00',
-              fontWeight: 'bold', margin: 'auto' }}
+              style={{
+                fontSize: '70px', color: '#FFDE00',
+                fontWeight: 'bold', margin: 'auto'
+              }}
             >
               <Image
                 size='massive'
-                src={ logo }
+                src={logo}
                 style={{ marginBottom: '20px' }}
               />
               Yalla Notlob
@@ -68,40 +79,46 @@ class Login extends React.Component {
           </Grid.Row>
           <Grid.Row
           >
-          <Grid.Column style={{ maxWidth: 350 }}>
-            <Header as='h2' style={{ color: '#ffffff' }}>
-              {' '}Log-in to your account
+            <Grid.Column style={{ maxWidth: 350 }}>
+              <Header as='h2' style={{ color: '#ffffff' }}>
+                {' '}Log-in to your account
             </Header>
-            <Form size='large' onSubmit={ this.handleSubmit }>
-              <Segment stacked>
-                <Form.Input
-                  name='email'
-                  fluid
-                  required
-                  icon='at'
-                  type='email'
-                  iconPosition='left'
-                  placeholder='E-mail address'
-                  onChange={ (e) => { this.setState({ email: e.target.value }) } }
-                />
-                <Form.Input
-                  name='password'
-                  fluid
-                  required
-                  icon='lock'
-                  iconPosition='left'
-                  placeholder='Password'
-                  type='password'
-                  onChange={ (e) => { this.setState({ password: e.target.value }) } }
-                />
+            <Segment stacked>
+              <Form size='large' onSubmit={this.handleSubmit}>
+                
+                  <Form.Input
+                    name='email'
+                    fluid
+                    required
+                    icon='at'
+                    type='email'
+                    iconPosition='left'
+                    placeholder='E-mail address'
+                    onChange={(e) => { this.setState({ email: e.target.value }) }}
+                  />
+                  <Form.Input
+                    name='password'
+                    fluid
+                    required
+                    icon='lock'
+                    iconPosition='left'
+                    placeholder='Password'
+                    type='password'
+                    onChange={(e) => { this.setState({ password: e.target.value }) }}
+                  />
 
-                <Button color='grey' fluid size='large'>Login</Button>
-              </Segment>
-            </Form>
-            <Message>
-              New to us? <a href='/register'>Sign Up</a>
-            </Message>
-          </Grid.Column>
+                  <Button color='grey' fluid size='large' id="login-button">Login</Button>
+                  
+                  </Form>
+                
+                    
+                 
+                </Segment>
+             
+              <Message>
+                New to us? <a href='/register'>Sign Up</a>
+              </Message>
+            </Grid.Column>
           </Grid.Row>
         </Grid>
       </div>
