@@ -1,10 +1,12 @@
 import React from 'react'
 import SocialLogin from 'react-social-login'
+import { Button, Form,Icon, Image, Grid, Header, Message, Segment } from 'semantic-ui-react';
  
-const Button = ({ children, triggerLogin, ...props }) => (
-  <button onClick={triggerLogin} {...props}>
+const Button2 = ({ children, triggerLogin, ...props }) => (
+  <Button color='google plus' fluid onClick={triggerLogin} {...props}>
+  <Icon name='google plus' />
     { children }
-  </button>
+  </Button>
 )
  
-export default SocialLogin(Button)
+export default SocialLogin(Button2)
