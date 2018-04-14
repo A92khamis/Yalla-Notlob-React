@@ -4,6 +4,8 @@ import Cookies from 'universal-cookie';
 import logo from '../public/images/otolb.png';
 import 'semantic-ui-css/semantic.min.css';
 import SocialButton from './SocialButton'
+import axios from 'axios';
+
 import './App.css';
 class Login extends React.Component {
 
@@ -36,6 +38,41 @@ class Login extends React.Component {
 
   handleSocialLogin = (user) => {
     console.log(user)
+    // axios({
+    //   method:'POST',
+    //   url:"http://localhost:3000/auth/register",
+    //   headers:{"Content-Type":"application/json"},
+    //   data:{        
+    //     "name": user._profile.name,
+    //     "email": user._profile.email,
+    //     "password": user._profile.id,
+    //     "api_type": 'g',
+    //     "api_token": user._token.accessToken ,
+    //     "profile_id":user._profile.id
+          
+    //   }
+    // }).then((res)=>{
+    //   console.log(res);
+      console.log(user._profile.email);
+      axios({
+        method:'POST',
+        url:"http://localhost:3000/auth/login",
+        headers:{"Content-Type":"application/json"},
+        data:{        
+          "email": user._profile.email,
+          "password": user._profile.id,   
+        }
+      }).then((logRes)=>{
+        
+        console.log('response', logRes);
+        console.log('access_token', logRes.data.access_token);
+        
+        const cookies = new Cookies();
+        cookies.set('access_token', logRes.data.access_token);
+         window.location = '/';
+      });
+         
+    // });
   }
 
   handleSocialLoginFailure = (err) => {

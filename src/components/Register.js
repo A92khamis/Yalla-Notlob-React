@@ -2,6 +2,9 @@ import React from 'react';
 import logo from '../public/images/otolb.png';
 import { Button, Form, Image, Grid, Header, Message, Segment } from 'semantic-ui-react';
 import 'semantic-ui-css/semantic.min.css';
+import SocialButton from './SocialButton';
+import Cookies from 'universal-cookie';
+import axios from 'axios';
 
 class Register extends React.Component {
 
@@ -14,6 +17,49 @@ class Register extends React.Component {
       passwordPattern: '',
       errorMessage: ''
     }
+  }
+
+
+
+  handleSocialLogin = (user) => {
+    console.log(user)
+    axios({
+      method:'POST',
+      url:"http://localhost:3000/auth/register",
+      headers:{"Content-Type":"application/json"},
+      data:{        
+        "name": user._profile.name,
+        "email": user._profile.email,
+        "password": user._profile.id,
+        "api_type": 'g',
+        "api_token": user._token.accessToken ,
+        "profile_id":user._profile.id
+          
+      }
+    }).then((res)=>{
+      console.log(res);
+      console.log(user._profile.email);
+      axios({
+        method:'POST',
+        url:"http://localhost:3000/auth/login",
+        headers:{"Content-Type":"application/json"},
+        data:{        
+          "email": user._profile.email,
+          "password": user._profile.id,   
+        }
+      }).then((logRes)=>{
+        
+        console.log('response', logRes);
+        const cookies = new Cookies();
+        cookies.set('access_token', logRes.data.access_token);
+        window.location = '/';
+      });
+         
+    });
+  }
+
+  handleSocialLoginFailure = (err) => {
+    console.error(err)
   }
 
   // helper function to escape the value of unput field password
@@ -56,6 +102,7 @@ class Register extends React.Component {
           body > div > div > div.form {
             height: 100%;
           }
+          
         `}</style>
         <Grid
           textAlign='center'
@@ -80,8 +127,9 @@ class Register extends React.Component {
             <Header as='h2' style={{ color: '#ffffff' }}>
               {' '}Create a new account
             </Header>
+            <Segment stacked>
             <Form size='large' onSubmit={ this.handleSubmit }>
-              <Segment stacked>
+             
                 <Form.Input
                   name='name'
                   required
@@ -134,9 +182,20 @@ class Register extends React.Component {
                     e.target.setCustomValidity('');
                   } }
                 />
-                <Button color='grey' fluid size='large'>Register</Button>
+                <Button color='grey' fluid size='large' id="register-button">Register</Button>
+                <div>
+                    <SocialButton 
+                      provider='google'
+                      appId= '228775057985-h5afvhpmglcloss2jj752h0t64lhmrgm.apps.googleusercontent.com'
+                      onLoginSuccess={this.handleSocialLogin}
+                      onLoginFailure={this.handleSocialLoginFailure}
+                    >
+                    Gmail
+                    </SocialButton>
+                    </div>
+                    </Form>
               </Segment>
-            </Form>
+            
             <Message>
               Already have account? <a href='/'>Login</a>
             </Message>
