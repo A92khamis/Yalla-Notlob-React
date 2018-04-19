@@ -1,104 +1,86 @@
 import React, { Component } from 'react';
-import './App.css';
-import { Label,Segment,Divider, Grid, Input, Menu, Icon, Form ,Container} from 'semantic-ui-react'
-import AllGroups from './allGroups.js';
-import Header from '../components/Header';
-import GroupMembers from './groupMembers';
-import axios from 'axios';
+import { Label, Card, Segment, Divider, Grid,
+  Header, Input, Menu, Icon, Form, Container } from 'semantic-ui-react'
 import Cookies from 'universal-cookie';
+import axios from 'axios';
+import AppHeader from '../components/Header';
+import AllGroups from './allGroups.js';
+import GroupMembers from './groupMembers';
+import './App.css';
 
 class Groups extends Component {
+  group = '';
   state = {
     group: '',
-    selectedGroup:''
+    selectedGroup: {}
   }
- 
-  
-
-
-
-
 
   render() {
     return (
       <div style={{ marginTop: '50px' }}>
-        { console.log(this.props.user) }
-        <Header user={ this.props.user } />
-      <Container>
-      <div className="App" >
-        <Grid columns={2}>
-          <Menu compact>
-            <Menu.Item id="label">
-              <Icon name='users' /> Groups
-              </Menu.Item>
-          </Menu>
-          <Grid.Row centered columns={2}>
-            <Grid.Column centered='true' >
-              <label id="label" to="">
-                group:
-                </label>
-              <Form onSubmit={this.handelGroupAdd}>
-                <Form.Group>
-                  <Form.Input icon='users' required placeholder='Email' name='email' iconPosition='left' onChange={this.doGroupChange} />
-                  <Form.Button content='add' primary />
-                </Form.Group>
-              </Form>
-            </Grid.Column>
-          </Grid.Row>
-        
-      <Divider horizontal >groups list</Divider>   
-      <Grid.Row centered columns={3}>
-      <Grid.Column width={7}>
-      <Segment >
-      <Label color='red' ribbon> groups</Label>
-      <Divider horizontal ></Divider> 
-
-      <AllGroups group={this.state.group} onGroupChange={this.changeGroup} />
-
-      </Segment>
-      </Grid.Column >
-      <Grid.Column width={8}>
-      <Segment >
-      <Label color='red' ribbon> group friends</Label>
-      <Divider horizontal ></Divider>  
-
-     <GroupMembers group={this.state.selectedGroup}/>
-
-                  </Segment >
-                </Grid.Column >
-              </Grid.Row>
-            </Grid>
-          </div>
-        </Container>
+        <AppHeader user={ this.props.user } />
+        <Grid style={{ margin: '50px 50px'}}>
+          <Grid.Column width={10}>
+            <Card raised fluid>
+              <Card.Content style={{ background: '#05396B' }}>
+                <Header as='h1' style={{ color: '#FFDE00' }}>
+                  <span><Icon size='small' name='users' /></span>
+                  { this.state.selectedGroup.name }
+                </Header>
+              </Card.Content>
+              {/*list friends in the group as well as adding new ones to the group*/}
+              { this.state.selectedGroup.id && <GroupMembers group={ this.state.selectedGroup } /> }
+            </Card>
+          </Grid.Column>
+          <Grid.Column width={6}>
+            <Card raised fluid>
+              <Card.Content style={{ background: '#05396B' }}>
+                <Header as='h3' style={{ color: '#FFDE00' }}>
+                  <span><Icon size='small' name='add user' /></span>Groups
+                </Header>
+              </Card.Content>
+              <Card.Content>
+                <Form onSubmit={ this.handelGroupAdd }>
+                  <Segment basic>
+                    <Form.Input icon='at'
+                      placeholder='Email'
+                      name='email' iconPosition='left'
+                      onChange={ this.doGroupChange }
+                      fluid
+                      required />
+                    <Form.Button icon='add' content='add' fluid color='grey' />
+                  </Segment>
+                </Form>
+              </Card.Content>
+              <AllGroups group={ this.state.group } onGroupChange={ this.changeGroup } />
+            </Card>
+          </Grid.Column>
+        </Grid>
       </div>
     );
   }
 
+  changeGroup = selectedGroup => { this.setState({ selectedGroup: selectedGroup }) }
 
-  changeGroup= selectedGroup => {this.setState({ selectedGroup:selectedGroup })
-console.log(`ahooooooooooooo${this.state.selectedGroup}`);
-};
-
-  handelGroupAdd= () => {
-    const cookies = new Cookies();       
+  handelGroupAdd = () => {
+    const cookies = new Cookies();
     console.log(this.group);
     axios({
       method:'POST',
       url:"http://localhost:3000/groups/",
-      headers:{"Content-Type":"application/json","Authorization":`Barear ${cookies.get("access_token")}`},
-      data:{        
-          "group":{
-              "groupName":this.group
-          }
-          
+      headers: { "Content-Type": "application/json",
+        Authorization: cookies.get("access_token") },
+      data: {
+        "group": {
+          "groupName": this.group
+        }
       }
-    }).then((res)=>{
-      this.setState({group: this.group});     
+    }).then((res) => {
+      this.setState({ group: this.group });
     });
-    
-   
-  } ;
-  doGroupChange =  (e, { name, value }) => this.group = value;
+  }
+
+  doGroupChange = (e, { name, value }) => this.group = value;
 }
 
 export default Groups;

@@ -5,7 +5,6 @@ import axios from 'axios';
 import Cookies from 'universal-cookie';
 
 class FriendsList extends Component {
-    friends=[];
     state = {
         friends: [],
         load:""
@@ -43,9 +42,9 @@ class FriendsList extends Component {
 
   render() {
     return (
-      <Segment.Group>
+      this.state.friends.length != 0 && <Segment.Group size='tiny'>
       {
-        this.state.friends && this.state.friends.map((friend) => (
+        this.state.friends.map((friend) => (
           <Segment attached compact>
             <Grid container>
               <Grid.Row centered='true'>
@@ -76,25 +75,26 @@ class FriendsList extends Component {
       </Segment.Group>
     );
   }
-            componentWillReceiveProps(nextProps){
-                this.feachFriends(); 
-            }
 
-            deleteFriend = (e) => {
-                console.log(e.target.id);
-                const cookies = new Cookies(); 
-                axios({
-                    method:'POST',
-                    url:`http://localhost:3000/friends/delete/`,
-                    headers:{"Content-Type":"application/json",
-                    "Authorization":`Barear ${cookies.get("access_token")}`},
-                    data:{
-                        id:`${e.target.id}`
-                    }
-                }).then((res)=>{
-                    this.feachFriends();     
-                  });
-            }
-        }
+  componentWillReceiveProps(nextProps) {
+    this.feachFriends(); 
+  }
+
+  deleteFriend = (e) => {
+    console.log(e.target.id);
+    const cookies = new Cookies(); 
+    axios({
+      method: 'POST',
+      url: `http://localhost:3000/friends/delete/`,
+      headers: {"Content-Type":"application/json",
+      "Authorization": `Barear ${cookies.get("access_token")}`},
+      data: {
+        id:`${e.target.id}`
+      }
+    }).then((res)=>{
+      this.feachFriends();     
+    });
+  }
+}
         
 export default FriendsList;
