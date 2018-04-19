@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
-import './App.css';
-import { Label,Button,Card,Image,Divider, Grid, Input, Menu, Icon, Form ,Container} from 'semantic-ui-react'
-import Header from '../components/Header';
-
+import { Label, Button, Card, Image, Divider, Grid, Input,
+  Segment, Menu, Icon, Form, Container, Header } from 'semantic-ui-react'
 import axios from 'axios';
 import Cookies from 'universal-cookie';
+import './App.css';
 
 class GroupMembers extends Component {
   friend = '';
@@ -15,139 +14,137 @@ class GroupMembers extends Component {
     group:''
   }
 
-  componentDidMount(){
-    this.feachFriends();
+  componentDidMount() {
+    this.setState({
+      group: this.props.group
+    });
+    this.fetchFriends();
   }
 
-  feachFriends(group) {
+  // componentWillUpdate() {
+  //   console.log('componentWillUpdate', this.props);
+  // }
+
+  fetchFriends() {
     const cookies = new Cookies();       
-        console.log(group);
-        
+    // let id = group ? group.id : undefined;
     axios({
-        method:'GET',
-        url:`http://localhost:3000/groups/members?group_id=${group ||this.state.group}`,
-        headers:{"Content-Type":"application/json",
-        "Authorization":`Barear ${cookies.get("access_token")}`},
-      }).then((res)=>{
-          console.log(res);
-          if(res.data.length >= 0){
-            if (group) {
-          this.setState({
-          group: group,
-          friends: res.data});   
-            }else{
+        method: 'GET',
+        url: `http://localhost:3000/groups/members?group_id=${ this.props.group.id }`,
+        headers: { "Content-Type": "application/json",
+        "Authorization": cookies.get("access_token")},
+      }).then((res) => {
+          if (res.data.length >= 0) {
+            if (this.props.group) {
+              console.log(res.data);
               this.setState({
-                friends: res.data}); 
+                group: this.props.group,
+                friends: res.data
+            });
+            } else {
+              this.setState({
+                friends: res.data});
             }
-          }   
-      });
-}
+          }
+    });
+  }
   
   render() {
     return (
-      <div>
-        <Container>
-        <div className="App" >
-          <Grid columns={2}>
-            <Grid.Row centered columns={2}>
-                <Form onSubmit={this.handleAdd}>
-                  <Form.Group>
-                    <Label size='large' style={{ marginBottom: '10px' }} to="">your friend email:</Label>
-                    <Form.Input icon='users' required placeholder='Email' name='email' iconPosition='left' onChange={this.doChange} />
-                    <Form.Button content='add' primary />
-                  </Form.Group>
-                </Form>
-            </Grid.Row>
-          </Grid>
-        </div>   
-        <Grid.Row >
-                  <div className="friends" >
-                      <Grid>
-                          {this.state.friends.map( friend => 
-                              <Grid.Column width={4}>
-                          <Card.Group >
-                              <Card>
-                                  <Card.Content>
-                                      <Image floated='right' size='mini' src='logo' />
-                                      <Card.Header>
-                                          {friend.id}
-                                      </Card.Header>
-                                      <Card.Meta>
-                                          Friends of Elliot
-                                  </Card.Meta>
-                                      <Card.Description>
-                                      </Card.Description>
-                                  </Card.Content>
-                                  <Card.Content extra>
-                                      <div className='ui one buttons'>
-                                          <Button basic color='red' id={friend.user_id} onClick={this.doRemove} >Remove</Button>
-                                      </div>
-                                  </Card.Content>
-                              </Card>
-                          </Card.Group>
-                          </Grid.Column>
-                          )}
-                          </Grid>
-                  </div>
-                  
-        </Grid.Row>
-        </Container>
-      </div>
+      <Card.Content>
+        {/*the form to add a friend to the selected group*/}
+        <Form onSubmit={ this.handleAdd }>
+          <Form.Group>
+            <Form.Input icon='at'
+              placeholder="Type your friend's Email"
+              name='email'
+              iconPosition='left'
+              required
+              onChange={ this.doChange } />
+            <Form.Button icon='add' content='add to group' color='grey' />
+          </Form.Group>
+        </Form>
+        { this.state.friends.length != 0 && <Segment.Group size='tiny'>
+          { this.state.friends.map( friend => (
+            <Segment attached compact>
+              <Grid container>
+                <Grid.Row centered='true'>
+                  <Grid.Column width={3} textAlign='left'>
+                    <Image size='tiny' src={ friend.image } />
+                  </Grid.Column>
+                  <Grid.Column width={4} textAlign='left'>
+                    <Header as='h3'>
+                      { friend.name }
+                    </Header>
+                  </Grid.Column>
+                  <Grid.Column width={4} textAlign='left'>
+                    <Header disabled as='h3'>
+                      { friend.email }
+                    </Header>
+                  </Grid.Column>
+                  <Grid.Column width={5} verticalAlign='true'>
+                    <Button basic color='red'
+                      id={ friend.id }
+                      onClick={ this.doRemove }>Remove
+                    </Button>
+                  </Grid.Column>
+                </Grid.Row>
+              </Grid>
+            </Segment>
+          )) }
+        </Segment.Group> }
+      </Card.Content>
     );
-
   }
 
-
   componentWillReceiveProps=( nextProps )=>{
-    console.log(nextProps);
-    this.feachFriends(nextProps.group);
-}  
+    console.log('nextProps', nextProps);
+    this.setState({
+      group: nextProps.group
+    });
+    this.fetchFriends(nextProps.group);
+  }
 
-  handleAdd= () => {
+  handleAdd = () => {
     console.log(this.friend);
-    
-
     const cookies = new Cookies();       
     console.log(this.state.group);
     axios({
-      method:'POST',
-      url:"http://localhost:3000/groups/add",
-      headers:{"Content-Type":"application/json","Authorization":`Barear ${cookies.get("access_token")}`},
-      data:{        
-        
-                
-          "group_id":this.state.group,
-          "email":this.friend
-      
-          
+      method: 'POST',
+      url: "http://localhost:3000/groups/add",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": cookies.get("access_token")
+      },
+      data: {
+        "group_id": this.state.group.id,
+        "email": this.friend
       }
-    }).then((res)=>{
-     console.log(res);
-      this.feachFriends(null); 
+    }).then((res) => {
+      this.fetchFriends(); 
     });
-  } ;
-  doChange =  (e, { name, value }) => this.friend = value;
+  }
 
+  doChange = (e, { name, value }) => this.friend = value
 
   doRemove = (e) => { 
-    console.log(e.target.id);
     const cookies = new Cookies();       
-    
+    console.log('friend id', e.target.id);
     axios({
-      method:'post',
-      url:"http://localhost:3000/groups/remove",
-      headers:{"Content-Type":"application/json","Authorization":`Barear ${cookies.get("access_token")}`},
-      data:{        
-        "group":{
-                
-          "group_id":this.state.group,
-          "user_id":e.target.id
+      method: 'post',
+      url: "http://localhost:3000/groups/remove",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": cookies.get("access_token")
+      },
+      data: {
+        "group": {
+          "group_id": this.state.group.id,
+          "user_id": e.target.id
+        }
       }
-          
-      }
-    }).then((res)=>{
-     console.log(res);
-      this.feachFriends(null); 
+    }).then((res) => {
+      this.fetchFriends(); 
     });
   }
 

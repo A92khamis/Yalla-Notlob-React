@@ -1,126 +1,117 @@
 import React, { Component } from 'react';
-import Header from '../components/Header';
-import './App.css';
-import uuid from 'uuid/v4';
-import { Grid, Card, Image, Button, Container, Item } from 'semantic-ui-react'
-import axios from 'axios';
+import ReactDOM from 'react-dom';
+import { Grid, Card, Image, Button, Container,
+  Segment, Item, Header } from 'semantic-ui-react'
 import Cookies from 'universal-cookie';
+import axios from 'axios';
+import uuid from 'uuid/v4';
+import './App.css';
 
 class AllGroups extends Component {
     groups = [];
-    selected = '';
+    selected = {};
     state = {
-        groups: []
-    }
+      groups: []
+    };
 
     constructor(props) {
-        super(props);
-        if (props.group) {
-            this.groups.push(props.group);
-        }
+      super(props);
+      if (props.group) {
+        this.groups.push(props.group);
+      }
     }
 
     componentDidMount(){
-        this.feachGroups();
+      this.fetch();
     }
 
-    feachGroups() {
+    fetch() {
     const cookies = new Cookies();       
-        
-        axios({
-            method:'GET',
-            url:"http://localhost:3000/groups/",
-            headers:{
-            "Authorization":`Barear ${cookies.get("access_token")}`},
-          }).then((res)=>{
-              console.log(res);
-            this.setState({groups:res.data});      
-          });
+      axios({
+          method:'GET',
+          url:"http://localhost:3000/groups/",
+          headers: {
+          "Authorization": cookies.get("access_token")},
+        }).then((res) => {
+          console.log(res);
+          this.setState({groups: res.data});      
+        });
     }
 
     render() {
         return (
-            <Container>
-                <div className="friends" >
-                    <Item.Group divided>
-                        {this.state.groups.map(friend =>
-                        
-                            <Item>
-                               {console.log(friend.groupName )}
-                                
-                                <Item.Content>
-                                    <Item.Header>{ friend.groupName }</Item.Header>
-                                    <Button icon='add user' id={friend.id} floated='right' onClick= {this.doAdd} >
-                                    </Button>
-                                    <Button icon='close' key={uuid()} id={friend.id} floated='right' onClick={ this.doDelete } >
-                                    </Button>
-                                </Item.Content>
-                            </Item>
-                        )}
-                          </Item.Group>
-
-                    </div>
-                </Container>
-        )
+          <Card.Content>
+            { this.state.groups.length != 0 && <Segment.Group size='tiny'>
+              { this.state.groups.map((group) => (
+                <Segment attached compact>
+                  <Grid container>
+                    <Grid.Row centered='true'>
+                      <Grid.Column width={4} textAlign='left'>
+                        <Header as='h3'>
+                          { group.groupName }
+                        </Header>
+                      </Grid.Column>
+                      <Grid.Column width={5} verticalAlign='true'>
+                        <Button basic color='red'
+                          icon='delete'
+                          key={ uuid() }
+                          id={ group.id }
+                          onClick={ this.doDelete }>
+                        </Button>
+                      </Grid.Column>
+                      <Grid.Column width={5} verticalAlign='true'>
+                        <Button basic color='green'
+                          icon='hand point up'
+                          key={ uuid() }
+                          id={ group.id }
+                          onClick={ this.doAdd }>
+                        </Button>
+                      </Grid.Column>
+                    </Grid.Row>
+                  </Grid>
+                </Segment>
+              )) }
+            </Segment.Group> }
+          </Card.Content>
+        );
     }
 
-
     componentWillReceiveProps = (nextProps) => {
-        console.log("ahooooooooooooooooooooooooooo");
-        console.log(nextProps);
-        this.feachGroups();
+      console.log("ahooooooooooooooooooooooooooo");
+      console.log(nextProps);
+      this.fetch();
     }
 
     doDelete = (e) => {
-    const cookies = new Cookies();       
-        
-        var urldel =  `http://localhost:3000/groups/${e.target.id}`;
-        console.log(urldel);
-        // var headers= {
-        //     "Content-Type":"application/json",
-        // "Authorization":"Barear eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJleHAiOjE1MjMzODE3Nzh9.ls-rW2WOanWnahx5akD_6TsTaDxSCrYkrWmUQHS9ko8"}
-        // axios.delete(`${urldel}`, {withCredentials: true, headers: headers}).then((res)=>{
-        //     this.feachGroups();     
-            
-        // });
-    // axios({
-    //     method: 'DELETE',
-    //         url: `http://localhost:3000/groups/${e.target.id}`,
-    //         headers: {"Content-Type":"application/json",
-    //         "Authorization":`Barear ${cookies.get("access_token")}`    
-    //         },
-    //       }).then( res =>{
-    //           console.log(res);
-              
-    //         this.feachGroups();     
-    //       });
-            var data = null;
-            var xhr = new XMLHttpRequest();
-            // xhr.withCredentials = true;
-            var that = this;
-            xhr.addEventListener("readystatechange", function () {
-            if (this.readyState === 4) {
-                that.feachGroups();
-            }
-            });
+      const cookies = new Cookies();       
 
-            xhr.open("DELETE", urldel);
-            xhr.setRequestHeader("Authorization", cookies.get("access_token"));
-            xhr.setRequestHeader("Content-Type", "application/json");
-            // xhr.setRequestHeader("Cache-Control", "no-cache");
-            // xhr.setRequestHeader("Postman-Token", "5c0322ad-4410-4311-bb0f-adb8f668cd18");
+      var urldel = `http://localhost:3000/groups/${e.target.id}`;
+      console.log(urldel);
+      var data = null;
+      var xhr = new XMLHttpRequest();
+      // xhr.withCredentials = true;
 
-            xhr.send(data);
+      xhr.open("DELETE", urldel);
+      xhr.setRequestHeader("Authorization", cookies.get("access_token"));
+      xhr.setRequestHeader("Content-Type", "application/json");
+      xhr.send(data);
+      var that = this;
+      xhr.addEventListener("readystatechange", function () {
+      if (xhr.readyState === 4) {
+        that.fetch();
+      }
+      });
     }
-    
 
     doAdd = (e) => {
-        console.log(`alllllllllllllllllll`);        
-        this.selected = e.target.id;
-        console.log(`alllllll${this.selected}`);
-        this.props.onGroupChange(this.selected);
-        
-        
+      this.selected.id = e.target.id;
+      for (var group of this.state.groups) {
+        if (group.id == this.selected.id) {
+          this.selected.name = group.groupName;
+          break;
+        }
+      }
+      this.props.onGroupChange(this.selected);
     }
 
 }
