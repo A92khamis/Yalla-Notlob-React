@@ -81,7 +81,7 @@ console.log(`ahooooooooooooo${this.state.selectedGroup}`);
 
   handelGroupAdd= () => {
     const cookies = new Cookies();       
-    console.log(this.group);
+    console.log("fjkgjkjkgjgkgk========="+this.group);
     axios({
       method:'POST',
       url:"http://localhost:3000/groups/",

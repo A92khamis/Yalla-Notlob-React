@@ -4,6 +4,11 @@ import { Image, Grid, List, Label, Segment } from 'semantic-ui-react'
 import Header from './Header';
 // import logo from '../logo.svg';
 import 'semantic-ui-css/semantic.min.css';
+import Cookies from 'universal-cookie';
+import axios from 'axios';
+import TimeAgo from 'react-time-ago'
+
+
 
 var uuid = require('uuid-v4'); // generating ids for each item in grids may be useful in furthur uses is Allah !!!
 
@@ -18,6 +23,34 @@ export default class Home extends Component {
 			{'friendName':"Mina", 'orderId':"2", 'type': "launch", 'from':"Mac"},
 		],
 	}
+
+
+	componentWillMount(){
+		
+		const cookies = new Cookies();       
+				console.log("http://localhost:3000/friends/latestActivities");
+				
+				axios({
+					method:'GET',
+					url:"http://localhost:3000/orders/latestOrders",
+					headers:{
+					"Authorization":`Barear ${cookies.get("access_token")}`},
+				}).then((res)=>{
+						console.log(res);
+					this.setState({latestOrders:res.data.orders});      
+				});
+				
+        axios({
+            method:'GET',
+            url:"http://localhost:3000/friends/latestActivities",
+            headers:{
+            "Authorization":`Barear ${cookies.get("access_token")}`},
+          }).then((res)=>{
+              console.log(res);
+            //this.setState({groups:res.data});      
+          });
+	}
+
   render() {
     return (
     	<div style={{ marginTop: '50px' }} >
@@ -32,7 +65,7 @@ export default class Home extends Component {
 									this.state.latestOrders && this.state.latestOrders.map((order)=>{
 										return(
 											<List.Item key={uuid()} as={Link} to={`/orders/${order.id}`}>
-											  <List.Content>{order.type} on {order.date}</List.Content>
+											  <List.Content>{order.meal_name} on {order.created_at}</List.Content>
 											</List.Item>
 										)
 									})
