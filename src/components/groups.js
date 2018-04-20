@@ -42,9 +42,9 @@ class Groups extends Component {
               <Card.Content>
                 <Form onSubmit={ this.handelGroupAdd }>
                   <Segment basic>
-                    <Form.Input icon='at'
-                      placeholder='Email'
-                      name='email' iconPosition='left'
+                    <Form.Input
+                      placeholder='New Group Name'
+                      name='name'
                       onChange={ this.doGroupChange }
                       fluid
                       required />

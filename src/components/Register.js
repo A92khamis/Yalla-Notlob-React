@@ -15,7 +15,8 @@ class Register extends React.Component {
       email: '',
       password: '',
       passwordPattern: '',
-      errorMessage: ''
+      errorMessage: '',
+      selectedFile: null
     }
   }
 
@@ -67,6 +68,10 @@ class Register extends React.Component {
     return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
   }
 
+  fileChangedHandler(e) {
+    this.setState({ selectedFile: e.target.files[0] })
+  }
+
   handleSubmit = (e) => {
     var xhr = new XMLHttpRequest();
     xhr.open('POST', 'http://localhost:3000/auth/register', false); // to put the route of registration
@@ -75,6 +80,7 @@ class Register extends React.Component {
       name: this.state.name,
       email: this.state.email,
       password: this.state.password,
+      image: this.state.selectedFile,
       api_type: 'w'
     }));
     let response;
@@ -102,7 +108,6 @@ class Register extends React.Component {
           body > div > div > div.form {
             height: 100%;
           }
-          
         `}</style>
         <Grid
           textAlign='center'
@@ -121,69 +126,76 @@ class Register extends React.Component {
               Yalla Notlob
             </Header>
           </Grid.Row>
-          <Grid.Row
-          >
-          <Grid.Column style={{ maxWidth: 350 }}>
-            <Header as='h2' style={{ color: '#ffffff' }}>
-              {' '}Create a new account
-            </Header>
-            <Segment stacked>
-            <Form size='large' onSubmit={ this.handleSubmit }>
-             
-                <Form.Input
-                  name='name'
-                  required
-                  fluid
-                  icon='user'
-                  iconPosition='left'
-                  placeholder='Name'
-                  onChange={ (e) => { this.setState({ name: e.target.value }) } }
-                />
-                <Form.Input
-                  name='email'
-                  required
-                  fluid
-                  icon='at'
-                  iconPosition='left'
-                  placeholder='E-mail address'
-                  type='email'
-                  inputMode='email'
-                  onChange={ (e) => { this.setState({ email: e.target.value }) } }
-                />
-                <Form.Input
-                  name='password'
-                  required
-                  fluid
-                  icon='lock'
-                  iconPosition='left'
-                  placeholder='Password'
-                  type='password'
-                  onChange={ (e) => {
-                    this.setState({
-                      passwordPattern: this.escapeRegExp(e.target.value),
-                      password: e.target.value
-                    })
-                  } }
-                />
-                <Form.Input
-                  name='confirmPassword'
-                  required
-                  fluid
-                  icon='lock'
-                  iconPosition='left'
-                  placeholder='Retype Password'
-                  type='password'
-                  pattern={ this.state.passwordPattern }
-                  // title="error"
-                  onInvalid={ (e) => {
-                    e.target.setCustomValidity('passwords don\'t match');
-                  } }
-                  onChange={ (e) => {
-                    e.target.setCustomValidity('');
-                  } }
-                />
-                <Button color='grey' fluid size='large' id="register-button">Register</Button>
-                <div>
+          <Grid.Row>
+            <Grid.Column style={{ maxWidth: 350 }}>
+              <Header as='h2' style={{ color: '#ffffff' }}>
+                {' '}Create a new account
+              </Header>
+              <Segment stacked>
+                <Form size='large' onSubmit={ this.handleSubmit }>
+                  <Form.Input
+                    name='name'
+                    required
+                    fluid
+                    icon='user'
+                    iconPosition='left'
+                    placeholder='Name'
+                    onChange={ (e) => { this.setState({ name: e.target.value }) } }
+                  />
+                  <Form.Input
+                    name='email'
+                    required
+                    fluid
+                    icon='at'
+                    iconPosition='left'
+                    placeholder='E-mail address'
+                    type='email'
+                    inputMode='email'
+                    onChange={ (e) => { this.setState({ email: e.target.value }) } }
+                  />
+                  <Form.Input
+                    name='password'
+                    required
+                    fluid
+                    icon='lock'
+                    iconPosition='left'
+                    placeholder='Password'
+                    type='password'
+                    onChange={ (e) => {
+                      this.setState({
+                        passwordPattern: this.escapeRegExp(e.target.value),
+                        password: e.target.value
+                      })
+                    } }
+                  />
+                  <Form.Input
+                    name='confirmPassword'
+                    required
+                    fluid
+                    icon='lock'
+                    iconPosition='left'
+                    placeholder='Retype Password'
+                    type='password'
+                    pattern={ this.state.passwordPattern }
+                    // title="error"
+                    onInvalid={ (e) => {
+                      e.target.setCustomValidity('passwords don\'t match');
+                    } }
+                    onChange={ (e) => {
+                      e.target.setCustomValidity('');
+                    } }
+                  />
+                  <Form.Input
+                    name='image'
+                    required
+                    fluid
+                    icon='image'
+                    iconPosition='left'
+                    type='file'
+                    onChange={ this.fileChangedHandler }
+                  />
+                  <Button color='grey' fluid size='large' id="register-button">Register</Button>
+                  <div>
                     <SocialButton 
                       provider='google'
                       appId= '228775057985-h5afvhpmglcloss2jj752h0t64lhmrgm.apps.googleusercontent.com'
@@ -192,14 +204,13 @@ class Register extends React.Component {
                     >
                     Gmail
                     </SocialButton>
-                    </div>
-                    </Form>
+                  </div>
+                </Form>
               </Segment>
-            
-            <Message>
-              Already have account? <a href='/'>Login</a>
-            </Message>
-          </Grid.Column>
+              <Message>
+                Already have account? <a href='/'>Login</a>
+              </Message>
+            </Grid.Column>
           </Grid.Row>
         </Grid>
       </div>

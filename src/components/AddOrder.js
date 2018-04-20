@@ -1,5 +1,5 @@
 import React from 'react';
-import { Form, Grid, Segment, Dropdown, Button, Icon, Label, Card, Header } from "semantic-ui-react";
+import { Form, Grid, Segment, Image, Dropdown, Button, Icon, Label, Card, Header } from "semantic-ui-react";
 import axios from 'axios';
 import {Redirect} from 'react-router-dom';
 import FileBase64 from 'react-file-base64';
@@ -153,7 +153,7 @@ export default class AddOrder extends React.Component{
         console.log("resres",this.order.res_name)
     }
 
-    render = ()=>{
+    render = () => {
         return (
             <div style={{ marginTop: '50px' }}>
                 <AppHeader user={ this.props.user } />
@@ -236,12 +236,60 @@ export default class AddOrder extends React.Component{
                             <Card.Content style={{ background: '#05396B' }}>
                                 <Header as='h3' style={{ color: '#FFDE00' }}>
                                     <span><Icon size='small' name='users' /></span>Friends List
+                                    { this.state.invitedFriends.length != 0 && <Segment.Group size='tiny'>
+                                        { this.state.invitedFriends.map( friend => (
+                                                <Segment attached compact>
+                                                  <Grid container>
+                                                    <Grid.Row centered='true'>
+                                                      <Grid.Column width={3} textAlign='left'>
+                                                        <Image size='tiny' src={ friend.image }
+                                                            value={friend.id}
+                                                            onClick={this.uninvite}
+                                                        />
+                                                      </Grid.Column>
+                                                      <Grid.Column width={4} textAlign='left'>
+                                                        <Header as='h3'>
+                                                          { friend.name }
+                                                        </Header>
+                                                      </Grid.Column>
+                                                      <Grid.Column width={4} textAlign='left'>
+                                                        <Header disabled as='h3'>
+                                                          { friend.email }
+                                                        </Header>
+                                                      </Grid.Column>
+                                                      <Grid.Column width={5} verticalAlign='true'>
+                                                        <Button basic color='red'
+                                                          value={friend.id}
+                                                          key={friend.id}
+                                                          id={ friend.id }
+                                                          onClick={ this.doRemove }>Remove
+                                                        </Button>
+                                                        <Button basic color='red'
+                                                          size='mini'
+                                                          value={ friend.id }
+                                                          id={ friend.id }
+                                                          onClick={this.uninvite}
+                                                        >
+                                                          <Icon name='window close'
+                                                            value={friend.id}
+                                                            onClick={this.uninvite}
+                                                          />
+                                                          Remove
+                                                        </Button>
+                                                      </Grid.Column>
+                                                    </Grid.Row>
+
+                                                  </Grid>
+                                                </Segment>
+                                        )) }
+                                        </Segment.Group>
+                                    }
                                 </Header>
                             </Card.Content>
                         </Card>
                     </Grid.Column>
                 </Grid>
             </div>
-        )
+        );
     }
 }
