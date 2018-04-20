@@ -12,6 +12,7 @@
     "react-router-dom": "^4.2.2",
     "react-scripts": "1.1.4",
     "react-social-login": "^3.4.2",
+    "react-time-ago": "^2.0.2",
     "semantic": "0.0.1",
     "semantic-ui-css": "^2.3.1",
     "semantic-ui-react": "^0.79.1",
